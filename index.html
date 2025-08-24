@@ -3,502 +3,336 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>NYU Athletics Donation Optimization</title>
-    <!-- Tailwind CSS (CDN, no build needed) -->
-    <script src="https://cdn.tailwindcss.com" crossorigin="anonymous" defer onerror="var s=document.createElement('script');s.src='https://unpkg.com/tailwindcss-cdn@3.4.1/tailwind.min.js';document.head.appendChild(s);"></script>
-    <!-- React 18 UMD -->
-    <script src="https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js" crossorigin="anonymous" defer onerror="var s=document.createElement('script');s.src='https://unpkg.com/react@18.3.1/umd/react.production.min.js';document.head.appendChild(s);" onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/react@18.3.1/umd/react.production.min.js';document.head.appendChild(s);"></script>
-    <script src="https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin="anonymous" defer onerror="var s=document.createElement('script');s.src='https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js';document.head.appendChild(s);" onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/react-dom@18.3.1/umd/react-dom.production.min.js';document.head.appendChild(s);"></script>
-    <!-- Recharts UMD -->
-    <script src="https://cdn.jsdelivr.net/npm/recharts@2.12.6/umd/Recharts.min.js" crossorigin="anonymous" defer onerror="var s=document.createElement('script');s.src='https://unpkg.com/recharts@2.12.6/umd/Recharts.min.js';document.head.appendChild(s);" onerror="var s=document.createElement('script');s.src='https://cdn.jsdelivr.net/npm/recharts@2.12.6/umd/Recharts.min.js';document.head.appendChild(s);"></script>
-    <!-- Babel for in-browser JSX transform -->
-    <script src="https://cdn.jsdelivr.net/npm/@babel/standalone@7.25.6/babel.min.js" crossorigin="anonymous" defer onerror="var s=document.createElement('script');s.src='https://unpkg.com/@babel/standalone@7.25.6/babel.min.js';document.head.appendChild(s);"></script>
+    <title>NYU Athletics Donation Optimization — No‑Dependency Build</title>
+    <style>
+      :root{
+        --bg: #f6f5ff; --bg2:#f0f7ff; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
+        --blue:#2563eb; --purple:#7c3aed; --green:#16a34a; --yellow:#f59e0b; --red:#dc2626;
+        --indigo:#6366f1; --teal:#14b8a6; --orange:#f97316; --sky:#0ea5e9;
+      }
+      *{box-sizing:border-box}
+      body{margin:0;background:linear-gradient(135deg,var(--bg),var(--bg2));font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;color:var(--text)}
+      .wrap{max-width:1120px;margin:0 auto;padding:24px}
+      .title{font-size:32px;font-weight:800;text-align:center;margin:6px 0}
+      .subtitle{font-size:18px;color:var(--muted);text-align:center;margin-bottom:20px}
+      .tabs{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin:18px 0}
+      .tab{border:0;border-radius:12px;padding:10px 16px;background:#fff;color:#374151;font-weight:600;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+      .tab.active{background:var(--blue);color:#fff;box-shadow:0 6px 18px rgba(37,99,235,.35)}
+      .grid{display:grid;gap:16px}
+      @media(min-width:768px){.g-4{grid-template-columns:repeat(4,1fr)} .g-2{grid-template-columns:repeat(2,1fr)} .g-3{grid-template-columns:repeat(3,1fr)}}
+      .card{background:var(--card);border-radius:14px;padding:18px;box-shadow:0 10px 30px rgba(0,0,0,.06)}
+      .metric{display:flex;gap:12px;align-items:center}
+      .metric .icon{width:28px;height:28px;border-radius:7px;display:grid;place-items:center}
+      .metric h3{margin:0;font-size:12px;color:#6b7280;font-weight:700;text-transform:uppercase;letter-spacing:.02em}
+      .metric p{margin:2px 0 0 0;font-size:22px;font-weight:800}
+      .pill{padding:6px 10px;border-radius:10px;background:#f3f4f6;color:#374151;cursor:pointer;font-weight:600}
+      .pill.active{background:var(--blue);color:#fff}
+      .row{display:flex;justify-content:space-between;align-items:center}
+      .bar{height:160px;display:flex;align-items:flex-end;gap:16px}
+      .barcol{width:42px;background:linear-gradient(180deg,var(--indigo),#c7d2fe);border-radius:8px}
+      .barcol.alt{background:linear-gradient(180deg,var(--teal),#99f6e4)}
+      .barlabel{text-align:center;font-size:12px;color:#374151;margin-top:8px}
+      .note{background:#ecfdf5;color:#166534;padding:10px;border-radius:10px;font-weight:700}
+      .donorlist .item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:#f8fafc}
+      .badge{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:8px}
+      .cta{background:linear-gradient(90deg,var(--blue),var(--purple));color:#fff;border:0;border-radius:16px;padding:16px 20px;text-align:center}
+      .cta h3{margin:0 0 8px 0}
+      .range{width:100%}
+      .pie{--size:200px; width:var(--size); height:var(--size); border-radius:50%; margin:auto; position:relative; background:#eee}
+      .pie::after{content:""; position:absolute; inset:22px; background:#fff; border-radius:50%}
+      .legend{display:grid;gap:8px}
+      .legend .row{justify-content:flex-start;gap:10px}
+      .footgrid{display:flex;gap:26px;justify-content:center}
+      .kpi{text-align:center}
+      .kpi .num{font-size:26px;font-weight:900}
+      .divider{height:1px;background:#e5e7eb;margin:12px 0}
+      .small{font-size:12px;color:var(--muted)}
+      .hidden{display:none}
+    </style>
   </head>
-  <body class="min-h-screen bg-gradient-to-br from-purple-50 to-blue-50">
-    <div id="root"><div id="fallback" class="p-4 text-center text-gray-700">Loading… If this doesn’t change, JavaScript failed to load.</div></div>
+  <body>
+    <div class="wrap">
+      <div class="title">NYU Athletics Donation Optimization</div>
+      <div class="subtitle">Data‑Driven Strategy for Increasing Donor Engagement Through Transparency</div>
 
-    <!-- Simple on-page error display for debugging (remove later) -->
-    <script>
-      window.addEventListener('error', function(e){
-        var r = document.getElementById('root');
-        if (e && e.target && e.target.tagName === 'SCRIPT') {
-          if (r) r.innerHTML = '<div class="max-w-xl mx-auto p-4 bg-red-50 text-red-700 rounded">Failed to load script: ' + (e.target.src || '(inline)') + '</div>';
-          return;
-        }
-        if(r){ r.innerHTML = '<div class="max-w-xl mx-auto p-4 bg-red-50 text-red-700 rounded">JS Error: '+ (e.error && e.error.message ? e.error.message : e.message) +'</div>'; }
-      }, true);
-    </script>
+      <div class="tabs">
+        <button class="tab active" data-tab="current">Current State</button>
+        <button class="tab" data-tab="comparisons">Real Examples</button>
+        <button class="tab" data-tab="prototype">Transparency Demo</button>
+        <button class="tab" data-tab="projections">ROI Analysis</button>
+      </div>
 
-    <script type="text/babel" data-presets="react">
-      (function boot(){
-        if (!(window.Recharts && window.React && window.ReactDOM)) { setTimeout(boot, 60); return; }
+      <!-- CURRENT -->
+      <section id="tab-current" class="tabpane">
+        <div class="grid g-4">
+          <div class="card metric"><div class="icon" style="background:#dbeafe">👁️</div><div><h3>Monthly Visitors</h3><p id="m-vis"></p></div></div>
+          <div class="card metric"><div class="icon" style="background:#dcfce7">🎯</div><div><h3>Conversion Rate</h3><p id="m-conv"></p></div></div>
+          <div class="card metric"><div class="icon" style="background:#fef9c3">💵</div><div><h3>Avg Donation</h3><p id="m-avg"></p></div></div>
+          <div class="card metric"><div class="icon" style="background:#efe9ff">📈</div><div><h3>Monthly Revenue</h3><p id="m-rev"></p></div></div>
+        </div>
 
-      const { useState } = React;
-      const {
-        BarChart, Bar, LineChart, Line, PieChart, Pie, Cell,
-        XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer
-      } = Recharts;
+        <div class="card" style="margin-top:16px">
+          <h3 style="margin:0 0 12px 0">Current Challenges</h3>
+          <div class="grid g-3">
+            <div class="card" style="background:#fef2f2"><b style="color:var(--red)">Lack of Transparency</b><div class="small">Donors don't know where their money goes, reducing trust.</div></div>
+            <div class="card" style="background:#fffbeb"><b style="color:var(--yellow)">Generic Experience</b><div class="small">One‑size‑fits‑all approach lacks emotional connection.</div></div>
+            <div class="card" style="background:#eff6ff"><b style="color:var(--blue)">No Impact Visualization</b><div class="small">Missing concrete impact demonstration.</div></div>
+          </div>
+        </div>
+      </section>
 
-      // Simple icon components that accept className/props
-      const TrendingUp = (props) => (
-        <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <polyline points="23 6 13.5 15.5 8.5 10.5 1 18"></polyline>
-          <polyline points="17 6 23 6 23 12"></polyline>
-        </svg>
-      );
-
-      const DollarSign = (props) => (
-        <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="12" y1="1" x2="12" y2="23"></line>
-          <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path>
-        </svg>
-      );
-
-      const Target = (props) => (
-        <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <circle cx="12" cy="12" r="10"></circle>
-          <circle cx="12" cy="12" r="6"></circle>
-          <circle cx="12" cy="12" r="2"></circle>
-        </svg>
-      );
-
-      const Eye = (props) => (
-        <svg {...props} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
-          <circle cx="12" cy="12" r="3"></circle>
-        </svg>
-      );
-
-      const ArrowRight = (props) => (
-        <svg {...props} width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <line x1="5" y1="12" x2="19" y2="12"></line>
-          <polyline points="12 5 19 12 12 19"></polyline>
-        </svg>
-      );
-
-      function NYUDonationDashboard() {
-        const [activeTab, setActiveTab] = useState('current');
-        const [selectedSport, setSelectedSport] = useState('basketball');
-        const [donationAmount, setDonationAmount] = useState(500);
-
-        // Current metrics data
-        const currentMetrics = {
-          monthlyVisitors: 2000,
-          conversionRate: 2.1,
-          avgDonation: 285,
-          monthlyRevenue: 11970
-        };
-
-        // Sports data
-        const sportsData = {
-          basketball: {
-            name: 'Basketball',
-            allocation: [
-              { name: 'Coaching & Training', value: 35, color: '#8884d8' },
-              { name: 'Equipment & Uniforms', value: 25, color: '#82ca9d' },
-              { name: 'Travel & Competition', value: 20, color: '#ffc658' },
-              { name: 'Facility Maintenance', value: 15, color: '#ff7300' },
-              { name: 'Academic Support', value: 5, color: '#0088fe' }
-            ]
-          },
-          tennis: {
-            name: 'Tennis',
-            allocation: [
-              { name: 'Court Maintenance', value: 30, color: '#8884d8' },
-              { name: 'Equipment & Strings', value: 28, color: '#82ca9d' },
-              { name: 'Travel & Tournaments', value: 25, color: '#ffc658' },
-              { name: 'Coaching', value: 12, color: '#ff7300' },
-              { name: 'Academic Support', value: 5, color: '#0088fe' }
-            ]
-          }
-        };
-
-        // Comparison data
-        const transparencyComparison = [
-          { category: 'Transparent', conversionRate: 3.8, retention: 78, avgGift: 230 },
-          { category: 'Non-Transparent', conversionRate: 1.6, retention: 45, avgGift: 140 }
-        ];
-
-        const beforeAfterCases = [
-          {
-            organization: "St. Jude Hospital",
-            before: { conversion: 2.1, retention: 52 },
-            after: { conversion: 4.8, retention: 82 },
-            change: "Added detailed treatment cost breakdowns"
-          },
-          {
-            organization: "University of Michigan",
-            before: { conversion: 1.9, retention: 48 },
-            after: { conversion: 3.2, retention: 71 },
-            change: "Implemented scholarship tracking"
-          }
-        ];
-
-        const currentSport = sportsData[selectedSport];
-        const donationBreakdown = currentSport.allocation.map(item => ({
-          ...item,
-          amount: Math.round((item.value / 100) * donationAmount)
-        }));
-
-        return (
-          <div className="min-h-screen p-6">
-            <div className="max-w-7xl mx-auto space-y-6">
-              {/* Header */}
-              <div className="text-center space-y-4">
-                <h1 className="text-4xl font-bold text-gray-800">NYU Athletics Donation Optimization</h1>
-                <p className="text-xl text-gray-600">Data-Driven Strategy for Increasing Donor Engagement Through Transparency</p>
+      <!-- COMPARISONS -->
+      <section id="tab-comparisons" class="tabpane hidden">
+        <div class="card">
+          <h3 style="margin:0 0 12px 0">Transparency vs Non‑Transparency Performance</h3>
+          <div class="grid g-3">
+            <div>
+              <b>Conversion Rate</b>
+              <div class="bar">
+                <div class="barcol" id="bar-conv-trans"></div>
+                <div class="barcol alt" id="bar-conv-non"></div>
               </div>
-
-              {/* Navigation Tabs */}
-              <div className="flex justify-center space-x-4 flex-wrap">
-                {[
-                  { id: 'current', label: 'Current State' },
-                  { id: 'comparisons', label: 'Real Examples' },
-                  { id: 'prototype', label: 'Transparency Demo' },
-                  { id: 'projections', label: 'ROI Analysis' }
-                ].map(tab => (
-                  <button
-                    key={tab.id}
-                    onClick={() => setActiveTab(tab.id)}
-                    className={`px-6 py-3 rounded-lg font-semibold transition-all ${
-                      activeTab === tab.id ? 'bg-blue-600 text-white shadow-lg' : 'bg-white text-gray-600 hover:bg-gray-50'
-                    }`}
-                  >
-                    {tab.label}
-                  </button>
-                ))}
+              <div class="row"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
+            </div>
+            <div>
+              <b>Donor Retention</b>
+              <div class="bar">
+                <div class="barcol" id="bar-ret-trans"></div>
+                <div class="barcol alt" id="bar-ret-non"></div>
               </div>
-
-              {/* Current State Tab */}
-              {activeTab === 'current' && (
-                <div className="space-y-6">
-                  {/* Metrics Cards */}
-                  <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className="text-blue-500"><Eye /></div>
-                        <div>
-                          <h3 className="text-sm font-medium text-gray-600">Monthly Visitors</h3>
-                          <p className="text-2xl font-bold text-gray-800">{currentMetrics.monthlyVisitors.toLocaleString()}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className="text-green-500"><Target /></div>
-                        <div>
-                          <h3 className="text-sm font-medium text-gray-600">Conversion Rate</h3>
-                          <p className="text-2xl font-bold text-gray-800">{currentMetrics.conversionRate}%</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className="text-yellow-500"><DollarSign /></div>
-                        <div>
-                          <h3 className="text-sm font-medium text-gray-600">Avg Donation</h3>
-                          <p className="text-2xl font-bold text-gray-800">${currentMetrics.avgDonation}</p>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="bg-white p-6 rounded-lg shadow-lg">
-                      <div className="flex items-center space-x-3">
-                        <div className="text-purple-500"><TrendingUp /></div>
-                        <div>
-                          <h3 className="text-sm font-medium text-gray-600">Monthly Revenue</h3>
-                          <p className="text-2xl font-bold text-gray-800">${currentMetrics.monthlyRevenue.toLocaleString()}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Problem Statement */}
-                  <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">Current Challenges</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="p-4 bg-red-50 rounded-lg">
-                        <h4 className="font-semibold text-red-700 mb-2">Lack of Transparency</h4>
-                        <p className="text-red-600">Donors don't know where their money goes, reducing trust.</p>
-                      </div>
-                      <div className="p-4 bg-yellow-50 rounded-lg">
-                        <h4 className="font-semibold text-yellow-700 mb-2">Generic Experience</h4>
-                        <p className="text-yellow-600">One-size-fits-all approach lacks emotional connection.</p>
-                      </div>
-                      <div className="p-4 bg-blue-50 rounded-lg">
-                        <h4 className="font-semibold text-blue-700 mb-2">No Impact Visualization</h4>
-                        <p className="text-blue-600">Missing concrete impact demonstration.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Comparisons Tab */}
-              {activeTab === 'comparisons' && (
-                <div className="space-y-6">
-                  <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">Transparency vs Non-Transparency Performance</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div>
-                        <h4 className="font-semibold mb-2">Conversion Rate</h4>
-                        <div style={{ width: '100%', height: 200 }}>
-                          <ResponsiveContainer width="100%" height={200}>
-                            <BarChart data={transparencyComparison}>
-                              <XAxis dataKey="category" />
-                              <YAxis />
-                              <Tooltip />
-                              <Bar dataKey="conversionRate" fill="#8884d8" />
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold mb-2">Donor Retention</h4>
-                        <div style={{ width: '100%', height: 200 }}>
-                          <ResponsiveContainer width="100%" height={200}>
-                            <BarChart data={transparencyComparison}>
-                              <XAxis dataKey="category" />
-                              <YAxis />
-                              <Tooltip />
-                              <Bar dataKey="retention" fill="#82ca9d" />
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="font-semibold mb-2">Average Gift</h4>
-                        <div style={{ width: '100%', height: 200 }}>
-                          <ResponsiveContainer width="100%" height={200}>
-                            <BarChart data={transparencyComparison}>
-                              <XAxis dataKey="category" />
-                              <YAxis />
-                              <Tooltip />
-                              <Bar dataKey="avgGift" fill="#ffc658" />
-                            </BarChart>
-                          </ResponsiveContainer>
-                        </div>
-                      </div>
-                    </div>
-                    <div className="mt-6 p-4 bg-green-50 rounded-lg">
-                      <p className="text-green-700 font-semibold">
-                        Key Insight: Transparent organizations achieve 137% higher conversion rates,
-                        73% better retention, and 64% larger gifts.
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Before/After Cases */}
-                  <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">Real Transformation Results</h3>
-                    <div className="space-y-4">
-                      {beforeAfterCases.map((case_, index) => (
-                        <div key={index} className="border rounded-lg p-4">
-                          <h4 className="font-semibold text-gray-800 mb-2">{case_.organization}</h4>
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-3">
-                            <div className="flex items-center">
-                              <span className="text-sm text-gray-600">Conversion Rate: </span>
-                              <span className="text-red-600 ml-1">{case_.before.conversion}%</span>
-                              <span className="mx-2"><ArrowRight /></span>
-                              <span className="text-green-600 font-bold">{case_.after.conversion}%</span>
-                            </div>
-                            <div className="flex items-center">
-                              <span className="text-sm text-gray-600">Retention: </span>
-                              <span className="text-red-600 ml-1">{case_.before.retention}%</span>
-                              <span className="mx-2"><ArrowRight /></span>
-                              <span className="text-green-600 font-bold">{case_.after.retention}%</span>
-                            </div>
-                          </div>
-                          <div className="bg-blue-50 p-3 rounded">
-                            <span className="text-blue-700 text-sm font-medium">{case_.change}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Prototype Tab */}
-              {activeTab === 'prototype' && (
-                <div className="space-y-6">
-                  <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">Enhanced Donation Experience</h3>
-
-                    {/* Sport Selection */}
-                    <div className="flex gap-3 mb-6">
-                      {Object.entries(sportsData).map(([key, sport]) => (
-                        <button
-                          key={key}
-                          onClick={() => setSelectedSport(key)}
-                          className={`px-4 py-2 rounded-lg font-medium transition-all ${
-                            selectedSport === key ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
-                          }`}
-                        >
-                          {sport.name}
-                        </button>
-                      ))}
-                    </div>
-
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                      {/* Donation Amount */}
-                      <div>
-                        <h4 className="text-lg font-semibold mb-3">Select Amount</h4>
-                        <div className="space-y-4">
-                          <div className="flex gap-3">
-                            {[250, 500, 1000, 2500].map(amount => (
-                              <button
-                                key={amount}
-                                onClick={() => setDonationAmount(amount)}
-                                className={`px-4 py-2 rounded-lg font-medium ${
-                                  donationAmount === amount ? 'bg-green-600 text-white' : 'bg-gray-100'
-                                }`}
-                              >
-                                ${amount}
-                              </button>
-                            ))}
-                          </div>
-                          <div>
-                            <label className="block text-sm font-medium mb-2">Custom: ${donationAmount}</label>
-                            <input
-                              type="range"
-                              min="50"
-                              max="5000"
-                              step="50"
-                              value={donationAmount}
-                              onChange={(e) => setDonationAmount(Number(e.target.value))}
-                              className="w-full"
-                            />
-                          </div>
-                        </div>
-                      </div>
-
-                      {/* Fund Allocation */}
-                      <div>
-                        <h4 className="text-lg font-semibold mb-3">Where Your ${donationAmount} Goes</h4>
-                        <div style={{ width: '100%', height: 240 }}>
-                          <ResponsiveContainer width="100%" height={240}>
-                            <PieChart>
-                              <Pie
-                                data={donationBreakdown}
-                                cx="50%"
-                                cy="50%"
-                                outerRadius={90}
-                                dataKey="amount"
-                                label={({name, amount}) => `$${amount}`}
-                              >
-                                {donationBreakdown.map((entry, index) => (
-                                  <Cell key={`cell-${index}`} fill={entry.color} />
-                                ))}
-                              </Pie>
-                              <Tooltip />
-                            </PieChart>
-                          </ResponsiveContainer>
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Breakdown Details */}
-                    <div className="mt-6">
-                      <h4 className="text-lg font-semibold mb-4">Your Impact Breakdown</h4>
-                      <div className="space-y-3">
-                        {donationBreakdown.map((item, index) => (
-                          <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                            <div className="flex items-center space-x-3">
-                              <div className="w-4 h-4 rounded" style={{backgroundColor: item.color}}></div>
-                              <span className="font-medium">{item.name}</span>
-                            </div>
-                            <div>
-                              <span className="font-bold text-green-600">${item.amount}</span>
-                              <span className="text-gray-500 ml-2">({item.value}%)</span>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Projections Tab */}
-              {activeTab === 'projections' && (
-                <div className="space-y-6">
-                  <div className="bg-white p-6 rounded-lg shadow-lg">
-                    <h3 className="text-xl font-bold text-gray-800 mb-4">ROI Analysis</h3>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                      <div>
-                        <h4 className="text-lg font-semibold mb-4">Implementation Costs</h4>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span>Development (3 months)</span>
-                            <span className="font-semibold">$25,000</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Design & UX</span>
-                            <span className="font-semibold">$8,000</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Testing & Analytics</span>
-                            <span className="font-semibold">$5,000</span>
-                          </div>
-                          <div className="flex justify-between border-t pt-3 font-bold">
-                            <span>Total Investment</span>
-                            <span>$38,000</span>
-                          </div>
-                        </div>
-                      </div>
-                      <div>
-                        <h4 className="text-lg font-semibold mb-4">Expected Returns</h4>
-                        <div className="space-y-3">
-                          <div className="flex justify-between">
-                            <span>Additional Monthly Revenue</span>
-                            <span className="font-semibold text-green-600">+$6,300</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Annual Revenue Increase</span>
-                            <span className="font-semibold text-green-600">+$75,600</span>
-                          </div>
-                          <div className="flex justify-between">
-                            <span>Payback Period</span>
-                            <span className="font-semibold">6 months</span>
-                          </div>
-                          <div className="flex justify-between border-t pt-3 font-bold">
-                            <span>Year 1 ROI</span>
-                            <span className="text-green-600">199%</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              )}
-
-              {/* Footer */}
-              <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-8 rounded-lg shadow-lg text-center">
-                <h3 className="text-2xl font-bold mb-4">Ready to Transform NYU's Fundraising?</h3>
-                <p className="text-xl mb-6">Data-driven strategy with proven results from peer institutions.</p>
-                <div className="flex justify-center space-x-6 text-sm">
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">137%</div>
-                    <div>Higher Conversion</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">199%</div>
-                    <div>Year 1 ROI</div>
-                  </div>
-                  <div className="text-center">
-                    <div className="text-2xl font-bold">6</div>
-                    <div>Months to Payback</div>
-                  </div>
-                </div>
+              <div class="row"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
+            </div>
+            <div>
+              <b>Average Gift</b>
+              <div class="bar">
+                <div class="barcol" id="bar-gift-trans"></div>
+                <div class="barcol alt" id="bar-gift-non"></div>
               </div>
+              <div class="row"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
             </div>
           </div>
-        );
+          <div class="note" style="margin-top:14px">Key Insight: Transparent orgs achieve 137% higher conversion, 73% better retention, 64% larger gifts.</div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3 style="margin:0 0 12px 0">Real Transformation Results</h3>
+          <div id="cases"></div>
+        </div>
+      </section>
+
+      <!-- PROTOTYPE -->
+      <section id="tab-prototype" class="tabpane hidden">
+        <div class="card">
+          <h3 style="margin-top:0">Enhanced Donation Experience</h3>
+          <div class="row" style="gap:12px; flex-wrap:wrap">
+            <div id="sport-buttons" style="display:flex;gap:8px"></div>
+          </div>
+          <div class="grid g-2" style="margin-top:16px; align-items:start">
+            <div>
+              <h4 style="margin:6px 0 8px 0">Select Amount</h4>
+              <div class="row" style="gap:8px; flex-wrap:wrap">
+                <button class="pill" data-amt="250">$250</button>
+                <button class="pill" data-amt="500">$500</button>
+                <button class="pill" data-amt="1000">$1000</button>
+                <button class="pill" data-amt="2500">$2500</button>
+              </div>
+              <div style="margin-top:12px">
+                <label class="small">Custom: $<span id="amt-label">500</span></label>
+                <input id="amt" class="range" type="range" min="50" max="5000" step="50" value="500" />
+              </div>
+            </div>
+            <div>
+              <h4 style="margin:6px 0 8px 0">Where Your $<span id="amt-inline">500</span> Goes</h4>
+              <div class="pie" id="pie"></div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <h4>Your Impact Breakdown</h4>
+          <div id="breakdown" class="donorlist"></div>
+        </div>
+      </section>
+
+      <!-- PROJECTIONS -->
+      <section id="tab-projections" class="tabpane hidden">
+        <div class="card">
+          <h3 style="margin:0 0 12px 0">ROI Analysis</h3>
+          <div class="grid g-2">
+            <div>
+              <h4>Implementation Costs</h4>
+              <div class="row"><span>Development (3 months)</span><b>$25,000</b></div>
+              <div class="row"><span>Design & UX</span><b>$8,000</b></div>
+              <div class="row"><span>Testing & Analytics</span><b>$5,000</b></div>
+              <div class="divider"></div>
+              <div class="row" style="font-weight:800"><span>Total Investment</span><span>$38,000</span></div>
+            </div>
+            <div>
+              <h4>Expected Returns</h4>
+              <div class="row"><span>Additional Monthly Revenue</span><b style="color:var(--green)">+$6,300</b></div>
+              <div class="row"><span>Annual Revenue Increase</span><b style="color:var(--green)">+$75,600</b></div>
+              <div class="row"><span>Payback Period</span><b>6 months</b></div>
+              <div class="divider"></div>
+              <div class="row" style="font-weight:800"><span>Year 1 ROI</span><span style="color:var(--green)">199%</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <div class="cta" style="margin-top:18px">
+        <h3>Ready to Transform NYU's Fundraising?</h3>
+        <div class="footgrid">
+          <div class="kpi"><div class="num">137%</div><div class="small" style="color:#fff;opacity:.9">Higher Conversion</div></div>
+          <div class="kpi"><div class="num">199%</div><div class="small" style="color:#fff;opacity:.9">Year 1 ROI</div></div>
+          <div class="kpi"><div class="num">6</div><div class="small" style="color:#fff;opacity:.9">Months to Payback</div></div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // ----- Data (mirrors your React version) -----
+      const currentMetrics = { monthlyVisitors: 2000, conversionRate: 2.1, avgDonation: 285, monthlyRevenue: 11970 };
+      const sportsData = {
+        basketball: { name: 'Basketball', allocation: [
+          { name: 'Coaching & Training', value: 35, color: '#8884d8' },
+          { name: 'Equipment & Uniforms', value: 25, color: '#82ca9d' },
+          { name: 'Travel & Competition', value: 20, color: '#ffc658' },
+          { name: 'Facility Maintenance', value: 15, color: '#ff7300' },
+          { name: 'Academic Support', value: 5, color: '#0088fe' } ] },
+        tennis: { name: 'Tennis', allocation: [
+          { name: 'Court Maintenance', value: 30, color: '#8884d8' },
+          { name: 'Equipment & Strings', value: 28, color: '#82ca9d' },
+          { name: 'Travel & Tournaments', value: 25, color: '#ffc658' },
+          { name: 'Coaching', value: 12, color: '#ff7300' },
+          { name: 'Academic Support', value: 5, color: '#0088fe' } ] }
+      };
+      const transparencyComparison = [
+        { category: 'Transparent', conversionRate: 3.8, retention: 78, avgGift: 230 },
+        { category: 'Non-Transparent', conversionRate: 1.6, retention: 45, avgGift: 140 }
+      ];
+      const beforeAfterCases = [
+        { organization: 'St. Jude Hospital', before: { conversion: 2.1, retention: 52 }, after: { conversion: 4.8, retention: 82 }, change: 'Added detailed treatment cost breakdowns' },
+        { organization: 'University of Michigan', before: { conversion: 1.9, retention: 48 }, after: { conversion: 3.2, retention: 71 }, change: 'Implemented scholarship tracking' },
+      ];
+
+      // ----- State -----
+      let activeTab = 'current';
+      let selectedSport = 'basketball';
+      let donationAmount = 500;
+
+      // ----- Helpers -----
+      const $ = (sel) => document.querySelector(sel);
+      const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+      function setText(id, text){ const el = document.getElementById(id); if(el) el.textContent = text; }
+      function fmtMoney(n){ return '$' + n.toLocaleString(); }
+
+      function renderMetrics(){
+        setText('m-vis', currentMetrics.monthlyVisitors.toLocaleString());
+        setText('m-conv', currentMetrics.conversionRate + '%');
+        setText('m-avg', fmtMoney(currentMetrics.avgDonation));
+        setText('m-rev', fmtMoney(currentMetrics.monthlyRevenue));
       }
 
-      const root = ReactDOM.createRoot(document.getElementById('root'));
-      root.render(<NYUDonationDashboard />);
-      })();
+      function renderBars(){
+        const maxConv = Math.max(...transparencyComparison.map(x=>x.conversionRate));
+        const maxRet  = Math.max(...transparencyComparison.map(x=>x.retention));
+        const maxGift = Math.max(...transparencyComparison.map(x=>x.avgGift));
+        const H = 160; // px
+        const t = transparencyComparison[0];
+        const n = transparencyComparison[1];
+        $('#bar-conv-trans').style.height = (H * t.conversionRate/maxConv) + 'px';
+        $('#bar-conv-non').style.height  = (H * n.conversionRate/maxConv) + 'px';
+        $('#bar-ret-trans').style.height = (H * t.retention/maxRet) + 'px';
+        $('#bar-ret-non').style.height  = (H * n.retention/maxRet) + 'px';
+        $('#bar-gift-trans').style.height = (H * t.avgGift/maxGift) + 'px';
+        $('#bar-gift-non').style.height  = (H * n.avgGift/maxGift) + 'px';
+      }
+
+      function renderCases(){
+        const c = $('#cases');
+        c.innerHTML = '';
+        beforeAfterCases.forEach(case_=>{
+          const div = document.createElement('div');
+          div.className = 'card';
+          div.innerHTML = `<b>${case_.organization}</b>
+            <div class="grid g-2" style="margin:8px 0">
+              <div>Conversion: <span style="color:#dc2626">${case_.before.conversion}%</span> → <b style="color:#16a34a">${case_.after.conversion}%</b></div>
+              <div>Retention: <span style="color:#dc2626">${case_.before.retention}%</span> → <b style="color:#16a34a">${case_.after.retention}%</b></div>
+            </div>
+            <div class="small" style="background:#eff6ff;padding:8px;border-radius:8px">${case_.change}</div>`;
+          c.appendChild(div);
+        });
+      }
+
+      function renderSportButtons(){
+        const wrap = document.getElementById('sport-buttons');
+        wrap.innerHTML='';
+        Object.entries(sportsData).forEach(([key, sport])=>{
+          const btn = document.createElement('button');
+          btn.className = 'pill' + (key===selectedSport?' active':'');
+          btn.textContent = sport.name;
+          btn.dataset.key = key;
+          btn.addEventListener('click', ()=>{ selectedSport = key; renderPrototype(); });
+          wrap.appendChild(btn);
+        });
+      }
+
+      function buildConicGradient(parts){
+        let acc = 0; let stops = [];
+        parts.forEach(p=>{ const start=acc; const end=acc + p.value; stops.push(`${p.color} ${start}% ${end}%`); acc=end; });
+        return `conic-gradient(${stops.join(',')})`;
+      }
+
+      function renderPrototype(){
+        // buttons state
+        $$('#sport-buttons .pill').forEach(b=> b.classList.toggle('active', b.dataset.key===selectedSport));
+        // labels
+        setText('amt-label', donationAmount);
+        setText('amt-inline', donationAmount);
+        // allocation math
+        const alloc = sportsData[selectedSport].allocation.map(it=> ({...it, amount: Math.round(it.value/100 * donationAmount)}));
+        // pie
+        const pie = document.getElementById('pie');
+        let pct = 0; const parts = alloc.map(a=> ({color:a.color, value:a.value}));
+        pie.style.background = buildConicGradient(parts);
+        // breakdown list
+        const list = document.getElementById('breakdown');
+        list.innerHTML = '';
+        alloc.forEach(it=>{
+          const row = document.createElement('div');
+          row.className = 'item';
+          row.innerHTML = `<div class="row" style="gap:8px"><span class="badge" style="background:${it.color}"></span><b>${it.name}</b></div>
+                           <div><b style="color:var(--green)">${fmtMoney(it.amount)}</b> <span class="small">(${it.value}%)</span></div>`;
+          list.appendChild(row);
+        });
+        // quick pills sync
+        $$('#tab-prototype .pill[data-amt]').forEach(p=> p.classList.toggle('active', Number(p.dataset.amt)===donationAmount));
+      }
+
+      function renderAll(){
+        renderMetrics();
+        renderBars();
+        renderCases();
+        renderSportButtons();
+        renderPrototype();
+      }
+
+      // ----- Events -----
+      $$('.tab').forEach(btn=>{
+        btn.addEventListener('click', ()=>{
+          $$('.tab').forEach(b=>b.classList.remove('active'));
+          btn.classList.add('active');
+          const id = btn.dataset.tab;
+          activeTab = id;
+          $$('.tabpane').forEach(p=>p.classList.add('hidden'));
+          document.getElementById('tab-'+id).classList.remove('hidden');
+        });
+      });
+
+      document.getElementById('amt').addEventListener('input', e=>{ donationAmount = Number(e.target.value); renderPrototype(); });
+      $$('#tab-prototype .pill[data-amt]').forEach(p=> p.addEventListener('click', ()=>{ donationAmount = Number(p.dataset.amt); document.getElementById('amt').value = donationAmount; renderPrototype(); }));
+
+      // ----- Kickoff -----
+      renderAll();
     </script>
   </body>
 </html>
