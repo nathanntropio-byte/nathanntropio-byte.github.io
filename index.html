@@ -109,7 +109,7 @@
             <div class="kpi"><div class="num">6</div><div class="small" style="color:#fff;opacity:.9">Months to Payback</div></div>
           </div>
           <div class="small" style="margin-top:10px">
-            <a href="https://www.issuelab.org/resources/44977/44977.pdf" target="_blank" rel="noopener" style="color:#fff;text-decoration:underline">Read the analysis that backs this →</a>
+            <a href="#roi-analysis" id="cta-internal-roi" style="color:#fff;text-decoration:underline">Read the analysis that backs this →</a>
           </div>
         </div>
       </section>
@@ -416,6 +416,17 @@
     if (inpLift) inpLift.addEventListener('input', ()=>{ transparencyLiftPct = Number(inpLift.value||0); if (selLift) selLift.value = 'custom'; renderROI(); });
 
     syncLiftUI();
+
+    // CTA link on Current State → switch to ROI Analysis tab
+    const linkROI = document.getElementById('cta-internal-roi');
+    if (linkROI) {
+      linkROI.addEventListener('click', function(e){
+        e.preventDefault();
+        const btn = document.querySelector('.tab[data-tab="projections"]');
+        if (btn) btn.click();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      });
+    }
   })();
 
   // ----- Kickoff -----
