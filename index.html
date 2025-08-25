@@ -127,7 +127,7 @@
         <div class="card">
           <h3 style="margin-top:0">Enhanced Donation Experience</h3>
           <div class="row" style="gap:12px; flex-wrap:wrap">
-            <div id="sport-buttons" style="display:flex;gap:8px"></div>
+            <div id="sport-buttons" style="display:flex;gap:8px"><button class="pill active">Basketball</button><button class="pill">Tennis</button></div>
           </div>
           <div class="grid g-2" style="margin-top:16px; align-items:start">
             <div>
@@ -145,12 +145,18 @@
             </div>
             <div>
               <h4 style="margin:6px 0 8px 0">Where Your $<span id="amt-inline">500</span> Goes</h4>
-              <div class="pie" id="pie"></div>
+              <div class="pie" id="pie" style="background:conic-gradient(#8884d8 0% 35%, #82ca9d 35% 60%, #ffc658 60% 80%, #ff7300 80% 95%, #0088fe 95% 100%)"></div>
             </div>
           </div>
           <div class="divider"></div>
           <h4>Your Impact Breakdown</h4>
-          <div id="breakdown" class="donorlist"></div>
+          <div id="breakdown" class="donorlist">
+            <div class="item"><div class="row" style="gap:8px"><span class="badge" style="background:#8884d8"></span><b>Coaching & Training</b></div><div><b style="color:var(--green)">$175</b> <span class="small">(35%)</span></div></div>
+            <div class="item"><div class="row" style="gap:8px"><span class="badge" style="background:#82ca9d"></span><b>Equipment & Uniforms</b></div><div><b style="color:var(--green)">$125</b> <span class="small">(25%)</span></div></div>
+            <div class="item"><div class="row" style="gap:8px"><span class="badge" style="background:#ffc658"></span><b>Travel & Competition</b></div><div><b style="color:var(--green)">$100</b> <span class="small">(20%)</span></div></div>
+            <div class="item"><div class="row" style="gap:8px"><span class="badge" style="background:#ff7300"></span><b>Facility Maintenance</b></div><div><b style="color:var(--green)">$75</b> <span class="small">(15%)</span></div></div>
+            <div class="item"><div class="row" style="gap:8px"><span class="badge" style="background:#0088fe"></span><b>Academic Support</b></div><div><b style="color:var(--green)">$25</b> <span class="small">(5%)</span></div></div>
+          </div>
         </div>
       </section>
 
@@ -216,6 +222,11 @@
         { name: 'charity: water — 100% Model', url: 'https://www.charitywater.org/our-approach/100-percent-model', summary: 'Public promise that 100% of public donations fund projects; operations covered separately.' },
         { name: 'DonorsChoose — Line-item breakdowns', url: 'https://www.donorschoose.org/about/finance.html', summary: 'Each classroom project shows an itemized cost breakdown so donors can see exactly where money goes.' }
       ];
+
+      // ----- State (restored) -----
+      let activeTab = 'current';
+      let selectedSport = 'basketball';
+      let donationAmount = 500;
 
       // Helpers
       const $ = (sel) => document.querySelector(sel);
@@ -325,6 +336,17 @@
 
       document.getElementById('amt').addEventListener('input', e=>{ donationAmount = Number(e.target.value); renderPrototype(); });
       $$('#tab-prototype .pill[data-amt]').forEach(p=> p.addEventListener('click', ()=>{ donationAmount = Number(p.dataset.amt); document.getElementById('amt').value = donationAmount; renderPrototype(); }));
+
+      // Debug: show top-level JS errors on page
+      window.addEventListener('error', function(e){
+        const r = document.querySelector('.wrap');
+        if(!r) return;
+        const msg = e && e.message ? e.message : (e.error && e.error.message) || 'Unknown error';
+        const pre = document.createElement('div');
+        pre.style.cssText='margin:12px 0;padding:10px;border-radius:10px;background:#fef2f2;color:#991b1b;font-weight:600;';
+        pre.textContent = 'JS Error: ' + msg;
+        r.insertBefore(pre, r.firstChild);
+      }, { once:true });
 
       // ----- Kickoff -----
       renderAll();
