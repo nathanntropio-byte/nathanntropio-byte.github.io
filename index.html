@@ -81,9 +81,7 @@
             <div class="kpi"><div class="num">199%</div><div class="small" style="color:#fff;opacity:.9">Year 1 ROI</div></div>
             <div class="kpi"><div class="num">6</div><div class="small" style="color:#fff;opacity:.9">Months to Payback</div></div>
           </div>
-          <div style="margin-top:12px">
-            <a href="#roi" id="cta-roi" class="pill" style="background:#fff;color:#1f2937">View ROI analysis →</a>
-          </div>
+          
         </div>
 
         <div class="card" style="margin-top:16px">
@@ -95,118 +93,6 @@
           </div>
         </div>
       </section>
-
-      <!-- COMPARISONS -->
-      <section id="tab-comparisons" class="tabpane hidden">
-        <div class="card">
-          <h3 style="margin:0 0 12px 0">Evidence from Real Orgs & Studies</h3>
-          <div class="grid g-3">
-            <div>
-              <b>Contribution Index (Candid Seal vs. No Seal)</b>
-              <div class="bar">
-                <div class="barcol" id="bar-conv-trans"></div>
-                <div class="barcol alt" id="bar-conv-non"></div>
-              </div>
-              <div class="barlabels"><div class="barlabel">Candid Seal</div><div class="barlabel">No Seal</div></div>
-            </div>
-            <div>
-              <b>Donor Preference: Want Full Spend Details</b>
-              <div class="bar">
-                <div class="barcol" id="bar-ret-trans"></div>
-                <div class="barcol alt" id="bar-ret-non"></div>
-              </div>
-              <div class="barlabels"><div class="barlabel">Want details</div><div class="barlabel">Don’t</div></div>
-            </div>
-            <div>
-              <b>Main Donation Page Conversion (M+R)</b>
-              <div class="bar">
-                <div class="barcol" id="bar-gift-trans"></div>
-                <div class="barcol alt" id="bar-gift-non"></div>
-              </div>
-              <div class="barlabels"><div class="barlabel">2021</div><div class="barlabel">2024</div></div>
-            </div>
-          </div>
-          <div class="note" style="margin-top:14px">Research snapshot: Candid studies associate transparency with +53% to +62% higher contributions (Seals of Transparency). M+R Benchmarks report median main donation-page conversion around 17% (2021) and ~12% in 2024 summaries. Donor surveys show ~67% want detailed info on how donations are spent.</div>
-          <div class="small" style="margin-top:8px">Sources:
-            <a href="https://candid.org/about/press-room/releases/new-research-shows-concrete-benefits-of-nonprofit-transparency" target="_blank" rel="noopener">Candid press release (Harris & Neely)</a> ·
-            <a href="https://www.issuelab.org/resources/44977/44977.pdf" target="_blank" rel="noopener">IssueLab white paper (Seal → +62% contributions)</a> ·
-            <a href="https://www.guidestar.org/UpdateNonprofitProfile/transparency/" target="_blank" rel="noopener">GuideStar/Candid Seal overview</a>
-          </div>
-        </div>
-
-        <div class="card" style="margin-top:16px">
-          <h3 style="margin:0 0 12px 0">Real Transformation Results</h3>
-          <p class="small">Evidence (summary): Nonprofits that improve or demonstrate transparency tend to see higher subsequent-year contributions (+53% to +62% in recent Candid studies). Main donation-page conversion medians are typically ~12–17% (M+R Benchmarks). See chat for sources.</p>
-          <div id="cases"></div>
-        </div>
-      </section>
-
-      <!-- PROTOTYPE -->
-      <section id="tab-prototype" class="tabpane hidden">
-        <div class="card">
-          <h3 style="margin-top:0">Enhanced Donation Experience</h3>
-          <div class="row" style="gap:12px; flex-wrap:wrap">
-            <div id="sport-buttons" style="display:flex;gap:8px"><button class="pill active">Basketball</button><button class="pill">Tennis</button></div>
-          </div>
-          <div class="grid g-2" style="margin-top:16px; align-items:start">
-            <div>
-              <h4 style="margin:6px 0 8px 0">Select Amount</h4>
-              <div class="row" style="gap:8px; flex-wrap:wrap">
-                <button class="pill" data-amt="250">$250</button>
-                <button class="pill" data-amt="500">$500</button>
-                <button class="pill" data-amt="1000">$1000</button>
-                <button class="pill" data-amt="2500">$2500</button>
-              </div>
-              <div style="margin-top:12px">
-                <label class="small">Custom: $<span id="amt-label">500</span></label>
-                <input id="amt" class="range" type="range" min="50" max="5000" step="50" value="500" />
-              </div>
-            </div>
-            <div>
-              <h4 style="margin:6px 0 8px 0">Where Your $<span id="amt-inline">500</span> Goes</h4>
-              <div class="pie" id="pie" style="background:conic-gradient(#8884d8 0% 35%, #82ca9d 35% 60%, #ffc658 60% 80%, #ff7300 80% 95%, #0088fe 95% 100%)"></div>
-            </div>
-          </div>
-          <div class="divider"></div>
-          <h4>Your Impact Breakdown</h4>
-          <div id="breakdown" class="donorlist">
-            <div class="item"><div class="row" style="gap:8px"><span class="badge" style="background:#8884d8"></span><b>Coaching & Training</b></div><div><b style="color:var(--green)">$175</b> <span class="small">(35%)</span></div></div>
-            <div class="item"><div class="row" style="gap:8px"><span class="badge" style="background:#82ca9d"></span><b>Equipment & Uniforms</b></div><div><b style="color:var(--green)">$125</b> <span class="small">(25%)</span></div></div>
-            <div class="item"><div class="row" style="gap:8px"><span class="badge" style="background:#ffc658"></span><b>Travel & Competition</b></div><div><b style="color:var(--green)">$100</b> <span class="small">(20%)</span></div></div>
-            <div class="item"><div class="row" style="gap:8px"><span class="badge" style="background:#ff7300"></span><b>Facility Maintenance</b></div><div><b style="color:var(--green)">$75</b> <span class="small">(15%)</span></div></div>
-            <div class="item"><div class="row" style="gap:8px"><span class="badge" style="background:#0088fe"></span><b>Academic Support</b></div><div><b style="color:var(--green)">$25</b> <span class="small">(5%)</span></div></div>
-          </div>
-        </div>
-      </section>
-
-      <!-- PROJECTIONS -->
-      <section id="tab-projections" class="tabpane hidden">
-        <div class="card">
-          <h3 style="margin:0 0 12px 0">ROI Analysis</h3>
-          <div class="grid g-2">
-            <div>
-              <h4>Implementation Costs</h4>
-              <div class="row"><span>Development (3 months)</span><b>$25,000</b></div>
-              <div class="row"><span>Design & UX</span><b>$8,000</b></div>
-              <div class="row"><span>Testing & Analytics</span><b>$5,000</b></div>
-              <div class="divider"></div>
-              <div class="row" style="font-weight:800"><span>Total Investment</span><span>$38,000</span></div>
-            </div>
-            <div>
-              <h4>Expected Returns</h4>
-              <div class="row"><span>Additional Monthly Revenue</span><b style="color:var(--green)">+$6,300</b></div>
-              <div class="row"><span>Annual Revenue Increase</span><b style="color:var(--green)">+$75,600</b></div>
-              <div class="row"><span>Payback Period</span><b>6 months</b></div>
-              <div class="divider"></div>
-              <div class="row" style="font-weight:800"><span>Year 1 ROI</span><span style="color:var(--green)">199%</span></div>
-            </div>
-          </div>
-        </div>
-      </section><div class="small" style="color:#fff;opacity:.9">Higher Conversion</div></div>
-          <div class="kpi"><div class="num">199%</div><div class="small" style="color:#fff;opacity:.9">Year 1 ROI</div></div>
-          <div class="kpi"><div class="num">6</div><div class="small" style="color:#fff;opacity:.9">Months to Payback</div></div>
-        </div>
-      </div>
     </div>
 
     <script>
