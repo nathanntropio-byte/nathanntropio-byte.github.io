@@ -85,34 +85,34 @@
       <!-- COMPARISONS -->
       <section id="tab-comparisons" class="tabpane hidden">
         <div class="card">
-          <h3 style="margin:0 0 12px 0">Transparency vs Non‑Transparency Performance</h3>
+          <h3 style="margin:0 0 12px 0">Evidence from Real Orgs & Studies</h3>
           <div class="grid g-3">
             <div>
-              <b>Conversion Rate</b>
+              <b>Contribution Index (Candid Seal vs. No Seal)</b>
               <div class="bar">
                 <div class="barcol" id="bar-conv-trans"></div>
                 <div class="barcol alt" id="bar-conv-non"></div>
               </div>
-              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non-Transparent</div></div>
+              <div class="barlabels"><div class="barlabel">Candid Seal</div><div class="barlabel">No Seal</div></div>
             </div>
             <div>
-              <b>Donor Retention</b>
+              <b>Donor Preference: Want Full Spend Details</b>
               <div class="bar">
                 <div class="barcol" id="bar-ret-trans"></div>
                 <div class="barcol alt" id="bar-ret-non"></div>
               </div>
-              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non-Transparent</div></div>
+              <div class="barlabels"><div class="barlabel">Want details</div><div class="barlabel">Don’t</div></div>
             </div>
             <div>
-              <b>Average Gift</b>
+              <b>Main Donation Page Conversion (M+R)</b>
               <div class="bar">
                 <div class="barcol" id="bar-gift-trans"></div>
                 <div class="barcol alt" id="bar-gift-non"></div>
               </div>
-              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non-Transparent</div></div>
+              <div class="barlabels"><div class="barlabel">2021</div><div class="barlabel">2024</div></div>
             </div>
           </div>
-          <div class="note" style="margin-top:14px">Research snapshot: Greater transparency is associated with materially higher giving (e.g., organizations with recognized transparency badges report +53% to +62% more contributions in the following year). Typical main donation‑page conversion medians fall around 12–17% depending on the year/sector.</div>
+          <div class="note" style="margin-top:14px">Research snapshot: Candid studies associate transparency with +53% to +62% higher contributions (Seals of Transparency). M+R Benchmarks report median main donation-page conversion around 17% (2021) and ~12% in 2024 summaries. Donor surveys show ~67% want detailed info on how donations are spent.</div>
         </div>
 
         <div class="card" style="margin-top:16px">
@@ -207,52 +207,25 @@
           { name: 'Academic Support', value: 5, color: '#0088fe' } ] }
       };
       const transparencyComparison = [
-        { category: 'Transparent', conversionRate: 3.8, retention: 78, avgGift: 230 },
-        { category: 'Non-Transparent', conversionRate: 1.6, retention: 45, avgGift: 140 }
+        { label: 'With Candid Seal', contributions: 162 }, // Candid 2025: +62%
+        { label: 'Without Seal', contributions: 100 }
       ];
-      const beforeAfterCases = []; // replaced made-up before/after examples with sourced summary in UI text
-
-      // ----- State -----
-      let activeTab = 'current';
-      let selectedSport = 'basketball';
-      let donationAmount = 500;
-
-      // ----- Helpers -----
-      const $ = (sel) => document.querySelector(sel);
-      const $$ = (sel) => Array.from(document.querySelectorAll(sel));
-
-      function setText(id, text){ const el = document.getElementById(id); if(el) el.textContent = text; }
-      function fmtMoney(n){ return '$' + n.toLocaleString(); }
-
-      function renderMetrics(){
-        setText('m-vis', currentMetrics.monthlyVisitors.toLocaleString());
-        setText('m-conv', currentMetrics.conversionRate + '%');
-        setText('m-avg', fmtMoney(currentMetrics.avgDonation));
-        setText('m-rev', fmtMoney(currentMetrics.monthlyRevenue));
-      }
-
-      function renderBars(){
-        const maxConv = Math.max(...transparencyComparison.map(x=>x.conversionRate));
-        const maxRet  = Math.max(...transparencyComparison.map(x=>x.retention));
-        const maxGift = Math.max(...transparencyComparison.map(x=>x.avgGift));
-        const H = 160; // px
-        const t = transparencyComparison[0];
-        const n = transparencyComparison[1];
-        $('#bar-conv-trans').style.height = (H * t.conversionRate/maxConv) + 'px';
-        $('#bar-conv-non').style.height  = (H * n.conversionRate/maxConv) + 'px';
-        $('#bar-ret-trans').style.height = (H * t.retention/maxRet) + 'px';
-        $('#bar-ret-non').style.height  = (H * n.retention/maxRet) + 'px';
-        $('#bar-gift-trans').style.height = (H * t.avgGift/maxGift) + 'px';
-        $('#bar-gift-non').style.height  = (H * n.avgGift/maxGift) + 'px';
-      }
+      const realExamples = [
+        { name: 'UNC Rams Club (Carolina Athletics)', url: 'https://ramsclub.com/opportunities-to-give/', summary: 'Shows funding priorities and areas your gift supports: scholarships, facilities, team operational support, student-athlete experience.' },
+        { name: 'Stanford Buck/Cardinal Club', url: 'https://gostanford.com/giving', summary: 'Explains how gifts fund scholarships, team travel, equipment, sports performance, nutrition, and academic advising.' },
+        { name: 'charity: water — 100% Model', url: 'https://www.charitywater.org/our-approach/100-percent-model', summary: 'Public promise that 100% of public donations fund projects; operations covered separately.' },
+        { name: 'DonorsChoose — Line-item breakdowns', url: 'https://www.donorschoose.org/about/finance.html', summary: 'Each classroom project shows an itemized cost breakdown so donors can see exactly where money goes.' }
+      ];
 
       function renderCases(){
-        const c = $('#cases');
-        c.innerHTML = '';
-        beforeAfterCases.forEach(case_=>{
+        const c = $('#cases'); c.innerHTML = '';
+        realExamples.forEach(ex=>{
           const div = document.createElement('div');
           div.className = 'card';
-          div.innerHTML = `<b>${case_.organization}</b>
+          div.innerHTML = `<b>${ex.name}</b><div class="small" style="margin-top:6px">${ex.summary} <a href="${ex.url}" target="_blank" rel="noopener">Learn more →</a></div>`;
+          c.appendChild(div);
+        });
+      }</b>
             <div class="grid g-2" style="margin:8px 0">
               <div>Conversion: <span style="color:#dc2626">${case_.before.conversion}%</span> → <b style="color:#16a34a">${case_.after.conversion}%</b></div>
               <div>Retention: <span style="color:#dc2626">${case_.before.retention}%</span> → <b style="color:#16a34a">${case_.after.retention}%</b></div>
