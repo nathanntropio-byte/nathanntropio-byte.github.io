@@ -56,7 +56,12 @@
       <div class="title">NYU Athletics Donation Optimization</div>
       <div class="subtitle">Data‑Driven Strategy for Increasing Donor Engagement Through Transparency</div>
 
-      <div class="tabs"><button class="tab active" data-tab="current">Current State</button></div>
+      <div class="tabs">
+        <button class="tab active" data-tab="current">Current State</button>
+        <button class="tab" data-tab="comparisons">Real Examples</button>
+        <button class="tab" data-tab="prototype">Transparency Demo</button>
+        <button class="tab" data-tab="projections">ROI Analysis</button>
+      </div>
 
       <!-- CURRENT -->
       <section id="tab-current" class="tabpane">
@@ -88,28 +93,255 @@
           </div>
         </div>
       </section>
-    <!-- COMPARISONS removed -->
-    <!-- PROTOTYPE removed -->
-    <!-- PROJECTIONS removed -->
+    <!-- COMPARISONS -->
+      <section id="tab-comparisons" class="tabpane hidden">
+        <div class="card">
+          <h3 style="margin:0 0 12px 0">Evidence from Real Orgs & Studies</h3>
+          <div class="grid g-3">
+            <div>
+              <b>Contribution Index (Candid Seal vs. No Seal)</b>
+              <div class="bar">
+                <div class="barcol" id="bar-conv-trans"></div>
+                <div class="barcol alt" id="bar-conv-non"></div>
+              </div>
+              <div class="barlabels"><div class="barlabel">Candid Seal</div><div class="barlabel">No Seal</div></div>
+            </div>
+            <div>
+              <b>Donor Preference: Want Full Spend Details</b>
+              <div class="bar">
+                <div class="barcol" id="bar-ret-trans"></div>
+                <div class="barcol alt" id="bar-ret-non"></div>
+              </div>
+              <div class="barlabels"><div class="barlabel">Want details</div><div class="barlabel">Don’t</div></div>
+            </div>
+            <div>
+              <b>Main Donation Page Conversion (M+R)</b>
+              <div class="bar">
+                <div class="barcol" id="bar-gift-trans"></div>
+                <div class="barcol alt" id="bar-gift-non"></div>
+              </div>
+              <div class="barlabels"><div class="barlabel">2021</div><div class="barlabel">2024</div></div>
+            </div>
+          </div>
+          <div class="note" style="margin-top:14px">Research snapshot: Candid studies associate transparency with +53% to +62% higher contributions (Seals of Transparency). M+R Benchmarks report median main donation-page conversion around 17% (2021) and ~12% in 2024 summaries. Donor surveys show ~67% want detailed info on how donations are spent.</div>
+          <div class="small" style="margin-top:8px">Sources:
+            <a href="https://candid.org/about/press-room/releases/new-research-shows-concrete-benefits-of-nonprofit-transparency" target="_blank" rel="noopener">Candid press release (Harris & Neely)</a> ·
+            <a href="https://www.issuelab.org/resources/44977/44977.pdf" target="_blank" rel="noopener">IssueLab white paper (Seal → +62% contributions)</a> ·
+            <a href="https://www.guidestar.org/UpdateNonprofitProfile/transparency/" target="_blank" rel="noopener">GuideStar/Candid Seal overview</a>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px">
+          <h3 style="margin:0 0 12px 0">Real Organization Examples</h3>
+          <div id="cases"></div>
+        </div>
+      </section>
+
+      <!-- PROTOTYPE -->
+      <section id="tab-prototype" class="tabpane hidden">
+        <div class="card">
+          <h3 style="margin-top:0">Enhanced Donation Experience</h3>
+          <div class="row" style="gap:12px; flex-wrap:wrap">
+            <div id="sport-buttons" style="display:flex;gap:8px"></div>
+          </div>
+          <div class="grid g-2" style="margin-top:16px; align-items:start">
+            <div>
+              <h4 style="margin:6px 0 8px 0">Select Amount</h4>
+              <div class="row" style="gap:8px; flex-wrap:wrap">
+                <button class="pill" data-amt="250">$250</button>
+                <button class="pill" data-amt="500">$500</button>
+                <button class="pill" data-amt="1000">$1000</button>
+                <button class="pill" data-amt="2500">$2500</button>
+              </div>
+              <div style="margin-top:12px">
+                <label class="small">Custom: $<span id="amt-label">500</span></label>
+                <input id="amt" class="range" type="range" min="50" max="5000" step="50" value="500" />
+              </div>
+            </div>
+            <div>
+              <h4 style="margin:6px 0 8px 0">Where Your $<span id="amt-inline">500</span> Goes</h4>
+              <div class="pie" id="pie"></div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <h4>Your Impact Breakdown</h4>
+          <div id="breakdown" class="donorlist"></div>
+        </div>
+      </section>
+
+      <!-- PROJECTIONS -->
+      <section id="tab-projections" class="tabpane hidden">
+        <div class="card">
+          <h3 style="margin:0 0 12px 0">ROI Analysis</h3>
+          <div class="grid g-2">
+            <div>
+              <h4>Implementation Costs</h4>
+              <div class="row"><span>Development (3 months)</span><b>$25,000</b></div>
+              <div class="row"><span>Design & UX</span><b>$8,000</b></div>
+              <div class="row"><span>Testing & Analytics</span><b>$5,000</b></div>
+              <div class="divider"></div>
+              <div class="row" style="font-weight:800"><span>Total Investment</span><span>$38,000</span></div>
+            </div>
+            <div>
+              <h4>Expected Returns</h4>
+              <div class="row"><span>Additional Monthly Revenue</span><b style="color:var(--green)">+$6,300</b></div>
+              <div class="row"><span>Annual Revenue Increase</span><b style="color:var(--green)">+$75,600</b></div>
+              <div class="row"><span>Payback Period</span><b>6 months</b></div>
+              <div class="divider"></div>
+              <div class="row" style="font-weight:800"><span>Year 1 ROI</span><span style="color:var(--green)">199%</span></div>
+            </div>
+          </div>
+        </div>
+      </section>
     </div>
 
     <script>
-  // Minimal script: only renders Current State metrics
+  // ----- Data -----
   const currentMetrics = { monthlyVisitors: 2000, conversionRate: 2.1, avgDonation: 285 };
+  const sportsData = {
+    basketball: { name: 'Basketball', allocation: [
+      { name: 'Coaching & Training', value: 35, color: '#8884d8' },
+      { name: 'Equipment & Uniforms', value: 25, color: '#82ca9d' },
+      { name: 'Travel & Competition', value: 20, color: '#ffc658' },
+      { name: 'Facility Maintenance', value: 15, color: '#ff7300' },
+      { name: 'Academic Support', value: 5, color: '#0088fe' } ] },
+    tennis: { name: 'Tennis', allocation: [
+      { name: 'Court Maintenance', value: 30, color: '#8884d8' },
+      { name: 'Equipment & Strings', value: 28, color: '#82ca9d' },
+      { name: 'Travel & Tournaments', value: 25, color: '#ffc658' },
+      { name: 'Coaching', value: 12, color: '#ff7300' },
+      { name: 'Academic Support', value: 5, color: '#0088fe' } ] }
+  };
+  const realExamples = [
+    { name: 'UNC Rams Club (Carolina Athletics)', url: 'https://ramsclub.com/opportunities-to-give/', summary: 'Shows funding priorities and areas your gift supports: scholarships, facilities, team operational support, student-athlete experience.' },
+    { name: 'Stanford Buck/Cardinal Club', url: 'https://gostanford.com/giving', summary: 'Explains how gifts fund scholarships, team travel, equipment, sports performance, nutrition, and academic advising.' },
+    { name: 'charity: water — 100% Model', url: 'https://www.charitywater.org/our-approach/100-percent-model', summary: 'Public promise that 100% of public donations fund projects; operations covered separately.' },
+    { name: 'DonorsChoose — Line-item breakdowns', url: 'https://www.donorschoose.org/about/finance.html', summary: 'Each classroom project shows an itemized cost breakdown so donors can see exactly where money goes.' }
+  ];
+
+  // ----- State -----
+  let activeTab = 'current';
+  let selectedSport = 'basketball';
+  let donationAmount = 500;
+
+  // ----- Helpers -----
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+  function setText(id, text){ const el = document.getElementById(id); if(el) el.textContent = text; }
   function fmtMoney(n){ return '$' + Number(n).toLocaleString(); }
+
   function renderMetrics(){
-    const vis = document.getElementById('m-vis');
-    const conv = document.getElementById('m-conv');
-    const avg = document.getElementById('m-avg');
-    const rev = document.getElementById('m-rev');
-    if(!vis||!conv||!avg||!rev) return;
-    vis.textContent = currentMetrics.monthlyVisitors.toLocaleString();
-    conv.textContent = currentMetrics.conversionRate + '%';
-    avg.textContent = fmtMoney(currentMetrics.avgDonation);
-    const r = Math.round(currentMetrics.monthlyVisitors * (currentMetrics.conversionRate/100) * currentMetrics.avgDonation);
-    rev.textContent = fmtMoney(r);
+    setText('m-vis', currentMetrics.monthlyVisitors.toLocaleString());
+    setText('m-conv', currentMetrics.conversionRate + '%');
+    setText('m-avg', fmtMoney(currentMetrics.avgDonation));
+    const rev = Math.round(currentMetrics.monthlyVisitors * (currentMetrics.conversionRate/100) * currentMetrics.avgDonation);
+    setText('m-rev', fmtMoney(rev));
   }
-  renderMetrics();
+
+  function renderBars(){
+    const H = 160;
+    // 1) Candid contributions index (162 vs 100)
+    const t1 = 162, n1 = 100; const max1 = Math.max(t1, n1);
+    $('#bar-conv-trans').style.height = (H * t1/max1) + 'px';
+    $('#bar-conv-non').style.height  = (H * n1/max1) + 'px';
+    // 2) Donor preference for details (67% want, 33% don't)
+    const want = 67, dont = 33; const max2 = Math.max(want, dont);
+    $('#bar-ret-trans').style.height = (H * want/max2) + 'px';
+    $('#bar-ret-non').style.height  = (H * dont/max2) + 'px';
+    // 3) M+R donation page conversion (17% vs 12%)
+    const y2021 = 17, y2024 = 12; const max3 = Math.max(y2021, y2024);
+    $('#bar-gift-trans').style.height = (H * y2021/max3) + 'px';
+    $('#bar-gift-non').style.height  = (H * y2024/max3) + 'px';
+  }
+
+  function renderCases(){
+    const c = $('#cases'); if(!c) return; c.innerHTML = '';
+    realExamples.forEach(ex=>{
+      const div = document.createElement('div');
+      div.className = 'card';
+      div.innerHTML = `<b>${ex.name}</b><div class="small" style="margin-top:6px">${ex.summary} <a href="${ex.url}" target="_blank" rel="noopener">Learn more →</a></div>`;
+      c.appendChild(div);
+    });
+  }
+
+  function renderSportButtons(){
+    const wrap = document.getElementById('sport-buttons'); if(!wrap) return;
+    wrap.innerHTML='';
+    Object.entries(sportsData).forEach(([key, sport])=>{
+      const btn = document.createElement('button');
+      btn.className = 'pill' + (key===selectedSport?' active':'');
+      btn.textContent = sport.name;
+      btn.dataset.key = key;
+      btn.addEventListener('click', ()=>{ selectedSport = key; renderPrototype(); renderSportButtons(); });
+      wrap.appendChild(btn);
+    });
+  }
+
+  function buildConicGradient(parts){
+    let acc = 0; let stops = [];
+    parts.forEach(p=>{ const start=acc; const end=acc + p.value; stops.push(`${p.color} ${start}% ${end}%`); acc=end; });
+    return `conic-gradient(${stops.join(',')})`;
+  }
+
+  function renderPrototype(){
+    // labels
+    setText('amt-label', donationAmount);
+    setText('amt-inline', donationAmount);
+    // allocation math
+    const sport = sportsData[selectedSport]; if(!sport) return;
+    const alloc = sport.allocation.map(it=> ({...it, amount: Math.round(it.value/100 * donationAmount)}));
+    // pie
+    const pie = document.getElementById('pie'); if(pie){ pie.style.background = buildConicGradient(alloc.map(a=>({color:a.color, value:a.value}))); }
+    // breakdown list
+    const list = document.getElementById('breakdown'); if(list){
+      list.innerHTML = '';
+      alloc.forEach(it=>{
+        const row = document.createElement('div');
+        row.className = 'item';
+        row.innerHTML = `<div class="row" style="gap:8px"><span class="badge" style="background:${it.color}"></span><b>${it.name}</b></div>
+                         <div><b style="color:var(--green)">${fmtMoney(it.amount)}</b> <span class="small">(${it.value}%)</span></div>`;
+        list.appendChild(row);
+      });
+    }
+    // amount pill active states
+    $$('#tab-prototype .pill[data-amt]').forEach(p=> p.classList.toggle('active', Number(p.dataset.amt)===donationAmount));
+  }
+
+  function renderAll(){
+    renderMetrics();
+    renderBars();
+    renderCases();
+    renderSportButtons();
+    renderPrototype();
+  }
+
+  // ----- Events -----
+  $$('.tab').forEach(btn=>{
+    btn.addEventListener('click', ()=>{
+      $$('.tab').forEach(b=>b.classList.remove('active'));
+      btn.classList.add('active');
+      const id = btn.dataset.tab;
+      activeTab = id;
+      $$('.tabpane').forEach(p=>p.classList.add('hidden'));
+      const active = document.getElementById('tab-'+id);
+      if(active){ active.classList.remove('hidden'); }
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+  });
+
+  (function(){
+    const amtEl = document.getElementById('amt');
+    if (amtEl) {
+      amtEl.addEventListener('input', e=>{ donationAmount = Number(e.target.value); renderPrototype(); });
+    }
+    const pills = $$('#tab-prototype .pill[data-amt]');
+    if (pills && pills.length) {
+      pills.forEach(p=> p.addEventListener('click', ()=>{ donationAmount = Number(p.dataset.amt); const s=document.getElementById('amt'); if(s) s.value = donationAmount; renderPrototype(); }));
+    }
+  })();
+
+  // ----- Kickoff -----
+  renderAll();
 </script>
   </body>
 </html>
