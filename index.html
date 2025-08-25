@@ -175,20 +175,34 @@
           <h3 style="margin:0 0 12px 0">ROI Analysis</h3>
           <div class="grid g-2">
             <div>
-              <h4>Implementation Costs</h4>
-              <div class="row"><span>Development (3 months)</span><b>$25,000</b></div>
-              <div class="row"><span>Design & UX</span><b>$8,000</b></div>
-              <div class="row"><span>Testing & Analytics</span><b>$5,000</b></div>
-              <div class="divider"></div>
-              <div class="row" style="font-weight:800"><span>Total Investment</span><span>$38,000</span></div>
+              <h4>Assumptions</h4>
+              <div class="grid g-3">
+                <label class="small">Monthly visitors<br><input id="inp-vis" type="number" min="0" step="1" value="2000" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px"></label>
+                <label class="small">Conversion rate (%)<br><input id="inp-conv" type="number" min="0" step="0.1" value="2.1" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px"></label>
+                <label class="small">Avg donation ($)<br><input id="inp-avg" type="number" min="0" step="1" value="285" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px"></label>
+              </div>
+              <div class="grid g-3" style="margin-top:10px">
+                <label class="small">Lift from transparency<br>
+                  <select id="sel-lift" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px">
+                    <option value="53">+53% (Candid/GuideStar study)</option>
+                    <option value="62">+62% (Candid Seal analysis)</option>
+                    <option value="custom">Custom…</option>
+                  </select>
+                </label>
+                <label class="small">Custom lift (%)<br><input id="inp-lift" type="number" min="0" step="1" value="53" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px"></label>
+                <label class="small">Total investment ($)<br><input id="inp-cost" type="number" min="0" step="100" value="38000" style="width:100%;padding:8px;border:1px solid #e5e7eb;border-radius:10px"></label>
+              </div>
+              <p class="small" style="margin-top:8px">Formulas: Added Monthly = Baseline Monthly × Lift; Annual Increase = Added Monthly × 12; Payback (months) = Cost ÷ Added Monthly; Year‑1 ROI = Annual Increase ÷ Cost. For net ROI use (Annual − Cost) ÷ Cost.</p>
             </div>
             <div>
-              <h4>Expected Returns</h4>
-              <div class="row"><span>Additional Monthly Revenue</span><b style="color:var(--green)">+$6,300</b></div>
-              <div class="row"><span>Annual Revenue Increase</span><b style="color:var(--green)">+$75,600</b></div>
-              <div class="row"><span>Payback Period</span><b>6 months</b></div>
+              <h4>Results</h4>
+              <div class="row"><span>Baseline Monthly Revenue</span><b id="roi-baseline">—</b></div>
+              <div class="row"><span>Added Monthly Revenue</span><b id="roi-monthly" style="color:var(--green)">—</b></div>
+              <div class="row"><span>Annual Revenue Increase</span><b id="roi-annual" style="color:var(--green)">—</b></div>
+              <div class="row"><span>Payback Period</span><b id="roi-payback">—</b></div>
               <div class="divider"></div>
-              <div class="row" style="font-weight:800"><span>Year 1 ROI</span><span style="color:var(--green)">199%</span></div>
+              <div class="row" style="font-weight:800"><span>Year 1 ROI (return ÷ cost)</span><span id="roi-roi" style="color:var(--green)">—</span></div>
+              <div class="small" style="margin-top:6px">Tip: switch the lift preset (53%/62%) or enter your own. Update visitors, conversion and average gift to match actual data when available.</div>
             </div>
           </div>
         </div>
@@ -223,6 +237,8 @@
   let activeTab = 'current';
   let selectedSport = 'basketball';
   let donationAmount = 500;
+  let transparencyLiftPct = 53;
+  let totalInvestment = 38000;
 
   // ----- Helpers -----
   const $ = (sel) => document.querySelector(sel);
@@ -307,12 +323,44 @@
     $$('#tab-prototype .pill[data-amt]').forEach(p=> p.classList.toggle('active', Number(p.dataset.amt)===donationAmount));
   }
 
+  function renderROI(){
+    const baseline = Math.round(currentMetrics.monthlyVisitors * (currentMetrics.conversionRate/100) * currentMetrics.avgDonation);
+    const addedMonthly = Math.round(baseline * (transparencyLiftPct/100));
+    const annual = addedMonthly * 12;
+    const payback = addedMonthly > 0 ? (totalInvestment / addedMonthly) : Infinity;
+    const roiPct = totalInvestment > 0 ? (annual / totalInvestment) * 100 : 0;
+
+    const b = id => document.getElementById(id);
+    if (b('roi-baseline')) b('roi-baseline').textContent = fmtMoney(baseline);
+    if (b('roi-monthly')) b('roi-monthly').textContent = '+' + fmtMoney(addedMonthly);
+    if (b('roi-annual')) b('roi-annual').textContent = '+' + fmtMoney(annual);
+    if (b('roi-payback')) b('roi-payback').textContent = (payback === Infinity ? '—' : payback.toFixed(1) + ' months');
+    if (b('roi-roi')) b('roi-roi').textContent = (roiPct).toFixed(0) + '%';
+  }));
+    // pie
+    const pie = document.getElementById('pie'); if(pie){ pie.style.background = buildConicGradient(alloc.map(a=>({color:a.color, value:a.value}))); }
+    // breakdown list
+    const list = document.getElementById('breakdown'); if(list){
+      list.innerHTML = '';
+      alloc.forEach(it=>{
+        const row = document.createElement('div');
+        row.className = 'item';
+        row.innerHTML = `<div class="row" style="gap:8px"><span class="badge" style="background:${it.color}"></span><b>${it.name}</b></div>
+                         <div><b style="color:var(--green)">${fmtMoney(it.amount)}</b> <span class="small">(${it.value}%)</span></div>`;
+        list.appendChild(row);
+      });
+    }
+    // amount pill active states
+    $$('#tab-prototype .pill[data-amt]').forEach(p=> p.classList.toggle('active', Number(p.dataset.amt)===donationAmount));
+  }
+
   function renderAll(){
     renderMetrics();
     renderBars();
     renderCases();
     renderSportButtons();
     renderPrototype();
+    renderROI();
   }
 
   // ----- Events -----
@@ -338,6 +386,29 @@
     if (pills && pills.length) {
       pills.forEach(p=> p.addEventListener('click', ()=>{ donationAmount = Number(p.dataset.amt); const s=document.getElementById('amt'); if(s) s.value = donationAmount; renderPrototype(); }));
     }
+
+    // ROI inputs
+    const vis = document.getElementById('inp-vis');
+    const conv = document.getElementById('inp-conv');
+    const avg = document.getElementById('inp-avg');
+    const cost = document.getElementById('inp-cost');
+    const selLift = document.getElementById('sel-lift');
+    const inpLift = document.getElementById('inp-lift');
+
+    function syncLiftUI(){
+      if (!selLift || !inpLift) return;
+      if (selLift.value === 'custom') { inpLift.disabled = false; }
+      else { inpLift.disabled = true; inpLift.value = selLift.value; transparencyLiftPct = Number(selLift.value); renderROI(); }
+    }
+
+    if (vis) vis.addEventListener('input', ()=>{ currentMetrics.monthlyVisitors = Number(vis.value||0); renderMetrics(); renderROI(); });
+    if (conv) conv.addEventListener('input', ()=>{ currentMetrics.conversionRate = Number(conv.value||0); renderMetrics(); renderROI(); });
+    if (avg) avg.addEventListener('input', ()=>{ currentMetrics.avgDonation = Number(avg.value||0); renderMetrics(); renderROI(); });
+    if (cost) cost.addEventListener('input', ()=>{ totalInvestment = Number(cost.value||0); renderROI(); });
+    if (selLift) selLift.addEventListener('change', syncLiftUI);
+    if (inpLift) inpLift.addEventListener('input', ()=>{ transparencyLiftPct = Number(inpLift.value||0); if (selLift) selLift.value = 'custom'; renderROI(); });
+
+    syncLiftUI();
   })();
 
   // ----- Kickoff -----
