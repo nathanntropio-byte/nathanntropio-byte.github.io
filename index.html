@@ -71,6 +71,7 @@
           <div class="card metric"><div class="icon" style="background:#fef9c3">💵</div><div><h3>Avg Donation</h3><p id="m-avg"></p></div></div>
           <div class="card metric"><div class="icon" style="background:#efe9ff">📈</div><div><h3>Monthly Revenue</h3><p id="m-rev"></p></div></div>
         </div>
+        <p class="small" style="margin-top:6px"><em>Note:</em> These figures are illustrative for demo purposes (not NYU’s actual analytics). We can swap in real GA4/CRM numbers when available.</p>
 
         <div class="card" style="margin-top:16px">
           <h3 style="margin:0 0 12px 0">Current Challenges</h3>
@@ -113,6 +114,11 @@
             </div>
           </div>
           <div class="note" style="margin-top:14px">Research snapshot: Candid studies associate transparency with +53% to +62% higher contributions (Seals of Transparency). M+R Benchmarks report median main donation-page conversion around 17% (2021) and ~12% in 2024 summaries. Donor surveys show ~67% want detailed info on how donations are spent.</div>
+          <div class="small" style="margin-top:8px">Sources:
+            <a href="https://candid.org/about/press-room/releases/new-research-shows-concrete-benefits-of-nonprofit-transparency" target="_blank" rel="noopener">Candid press release (Harris & Neely)</a> ·
+            <a href="https://www.issuelab.org/resources/44977/44977.pdf" target="_blank" rel="noopener">IssueLab white paper (Seal → +62% contributions)</a> ·
+            <a href="https://www.guidestar.org/UpdateNonprofitProfile/transparency/" target="_blank" rel="noopener">GuideStar/Candid Seal overview</a>
+          </div>
         </div>
 
         <div class="card" style="margin-top:16px">
@@ -238,7 +244,11 @@
         setText('m-vis', currentMetrics.monthlyVisitors.toLocaleString());
         setText('m-conv', currentMetrics.conversionRate + '%');
         setText('m-avg', fmtMoney(currentMetrics.avgDonation));
-        setText('m-rev', fmtMoney(currentMetrics.monthlyRevenue));
+        // Compute revenue from the other three inputs so it's always consistent
+        const rev = Math.round(
+          currentMetrics.monthlyVisitors * (currentMetrics.conversionRate/100) * currentMetrics.avgDonation
+        );
+        setText('m-rev', fmtMoney(rev));
       }
 
       function renderBars(){
