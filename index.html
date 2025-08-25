@@ -8,7 +8,7 @@
       :root{
         --bg: #f6f5ff; --bg2:#f0f7ff; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
         --blue:#2563eb; --purple:#7c3aed; --green:#16a34a; --yellow:#f59e0b; --red:#dc2626;
-        --indigo:#6366f1; --teal:#14b8a6; --orange:#f97316; --sky:#0ea5e9;
+        --indigo:#6366f1; --teal:#14b8a6; --orange:#f97316; --sky:#0ea5e9; --barw:56px; --bargap:18px;
       }
       *{box-sizing:border-box}
       body{margin:0;background:linear-gradient(135deg,var(--bg),var(--bg2));font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;color:var(--text)}
@@ -28,11 +28,11 @@
       .pill{padding:6px 10px;border-radius:10px;background:#f3f4f6;color:#374151;cursor:pointer;font-weight:600}
       .pill.active{background:var(--blue);color:#fff}
       .row{display:flex;justify-content:space-between;align-items:center}
-      .bar{height:160px;display:grid;grid-template-columns:repeat(2,42px);justify-content:center;column-gap:16px;align-items:end}
-      .barcol{width:42px;background:linear-gradient(180deg,var(--indigo),#c7d2fe);border-radius:8px}
+      .bar{height:160px;display:grid;grid-template-columns:repeat(2,var(--barw));justify-content:center;column-gap:var(--bargap);align-items:end}
+      .barcol{width:var(--barw);background:linear-gradient(180deg,var(--indigo),#c7d2fe);border-radius:8px}
       .barcol.alt{background:linear-gradient(180deg,var(--teal),#99f6e4)}
-      .barlabel{text-align:center;font-size:12px;color:#374151;margin-top:8px}
-      .barlabels{display:grid;grid-template-columns:repeat(2,42px);justify-content:center;column-gap:16px;margin-top:8px}
+      .barlabel{width:var(--barw);text-align:center;font-size:12px;color:#374151;margin-top:8px;overflow-wrap:anywhere;word-break:break-word;line-height:1.1}
+      .barlabels{display:grid;grid-template-columns:repeat(2,var(--barw));justify-content:center;justify-items:center;column-gap:var(--bargap);margin-top:8px}
       .note{background:#ecfdf5;color:#166534;padding:10px;border-radius:10px;font-weight:700}
       .donorlist .item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:#f8fafc}
       .badge{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:8px}
@@ -93,7 +93,7 @@
                 <div class="barcol" id="bar-conv-trans"></div>
                 <div class="barcol alt" id="bar-conv-non"></div>
               </div>
-              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
+              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non-Transparent</div></div>
             </div>
             <div>
               <b>Donor Retention</b>
@@ -101,7 +101,7 @@
                 <div class="barcol" id="bar-ret-trans"></div>
                 <div class="barcol alt" id="bar-ret-non"></div>
               </div>
-              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
+              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non-Transparent</div></div>
             </div>
             <div>
               <b>Average Gift</b>
@@ -109,14 +109,15 @@
                 <div class="barcol" id="bar-gift-trans"></div>
                 <div class="barcol alt" id="bar-gift-non"></div>
               </div>
-              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
+              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non-Transparent</div></div>
             </div>
           </div>
-          <div class="note" style="margin-top:14px">Key Insight: Transparent orgs achieve 137% higher conversion, 73% better retention, 64% larger gifts.</div>
+          <div class="note" style="margin-top:14px">Research snapshot: Greater transparency is associated with materially higher giving (e.g., organizations with recognized transparency badges report +53% to +62% more contributions in the following year). Typical main donation‑page conversion medians fall around 12–17% depending on the year/sector.</div>
         </div>
 
         <div class="card" style="margin-top:16px">
           <h3 style="margin:0 0 12px 0">Real Transformation Results</h3>
+          <p class="small">Evidence (summary): Nonprofits that improve or demonstrate transparency tend to see higher subsequent-year contributions (+53% to +62% in recent Candid studies). Main donation-page conversion medians are typically ~12–17% (M+R Benchmarks). See chat for sources.</p>
           <div id="cases"></div>
         </div>
       </section>
@@ -209,10 +210,7 @@
         { category: 'Transparent', conversionRate: 3.8, retention: 78, avgGift: 230 },
         { category: 'Non-Transparent', conversionRate: 1.6, retention: 45, avgGift: 140 }
       ];
-      const beforeAfterCases = [
-        { organization: 'St. Jude Hospital', before: { conversion: 2.1, retention: 52 }, after: { conversion: 4.8, retention: 82 }, change: 'Added detailed treatment cost breakdowns' },
-        { organization: 'University of Michigan', before: { conversion: 1.9, retention: 48 }, after: { conversion: 3.2, retention: 71 }, change: 'Implemented scholarship tracking' },
-      ];
+      const beforeAfterCases = []; // replaced made-up before/after examples with sourced summary in UI text
 
       // ----- State -----
       let activeTab = 'current';
