@@ -56,12 +56,7 @@
       <div class="title">NYU Athletics Donation Optimization</div>
       <div class="subtitle">Data‑Driven Strategy for Increasing Donor Engagement Through Transparency</div>
 
-      <div class="tabs">
-        <button class="tab active" data-tab="current">Current State</button>
-        <button class="tab" data-tab="comparisons">Real Examples</button>
-        <button class="tab" data-tab="prototype">Transparency Demo</button>
-        <button class="tab" data-tab="projections">ROI Analysis</button>
-      </div>
+      <div class="tabs"><button class="tab active" data-tab="current">Current State</button></div>
 
       <!-- CURRENT -->
       <section id="tab-current" class="tabpane">
@@ -93,178 +88,28 @@
           </div>
         </div>
       </section>
+    <!-- COMPARISONS removed -->
+    <!-- PROTOTYPE removed -->
+    <!-- PROJECTIONS removed -->
     </div>
 
     <script>
-      // ----- Data (mirrors your React version) -----
-      const currentMetrics = { monthlyVisitors: 2000, conversionRate: 2.1, avgDonation: 285, monthlyRevenue: 11970 };
-      const sportsData = {
-        basketball: { name: 'Basketball', allocation: [
-          { name: 'Coaching & Training', value: 35, color: '#8884d8' },
-          { name: 'Equipment & Uniforms', value: 25, color: '#82ca9d' },
-          { name: 'Travel & Competition', value: 20, color: '#ffc658' },
-          { name: 'Facility Maintenance', value: 15, color: '#ff7300' },
-          { name: 'Academic Support', value: 5, color: '#0088fe' } ] },
-        tennis: { name: 'Tennis', allocation: [
-          { name: 'Court Maintenance', value: 30, color: '#8884d8' },
-          { name: 'Equipment & Strings', value: 28, color: '#82ca9d' },
-          { name: 'Travel & Tournaments', value: 25, color: '#ffc658' },
-          { name: 'Coaching', value: 12, color: '#ff7300' },
-          { name: 'Academic Support', value: 5, color: '#0088fe' } ] }
-      };
-      const transparencyComparison = [
-        { label: 'With Candid Seal', contributions: 162 }, // Candid 2025: +62%
-        { label: 'Without Seal', contributions: 100 }
-      ];
-      const realExamples = [
-        { name: 'UNC Rams Club (Carolina Athletics)', url: 'https://ramsclub.com/opportunities-to-give/', summary: 'Shows funding priorities and areas your gift supports: scholarships, facilities, team operational support, student-athlete experience.' },
-        { name: 'Stanford Buck/Cardinal Club', url: 'https://gostanford.com/giving', summary: 'Explains how gifts fund scholarships, team travel, equipment, sports performance, nutrition, and academic advising.' },
-        { name: 'charity: water — 100% Model', url: 'https://www.charitywater.org/our-approach/100-percent-model', summary: 'Public promise that 100% of public donations fund projects; operations covered separately.' },
-        { name: 'DonorsChoose — Line-item breakdowns', url: 'https://www.donorschoose.org/about/finance.html', summary: 'Each classroom project shows an itemized cost breakdown so donors can see exactly where money goes.' }
-      ];
-
-      // ----- State (restored) -----
-      let activeTab = 'current';
-      let selectedSport = 'basketball';
-      let donationAmount = 500;
-
-      // Helpers
-      const $ = (sel) => document.querySelector(sel);
-      const $$ = (sel) => Array.from(document.querySelectorAll(sel));
-      function setText(id, text){ const el = document.getElementById(id); if(el) el.textContent = text; }
-      function fmtMoney(n){ return '$' + n.toLocaleString(); }
-
-      function renderMetrics(){
-        setText('m-vis', currentMetrics.monthlyVisitors.toLocaleString());
-        setText('m-conv', currentMetrics.conversionRate + '%');
-        setText('m-avg', fmtMoney(currentMetrics.avgDonation));
-        // Compute revenue from the other three inputs so it's always consistent
-        const rev = Math.round(
-          currentMetrics.monthlyVisitors * (currentMetrics.conversionRate/100) * currentMetrics.avgDonation
-        );
-        setText('m-rev', fmtMoney(rev));
-      }
-
-      function renderBars(){
-        const H = 160; // px
-        // 1) Candid contributions index (162 vs 100)
-        const t1 = transparencyComparison[0].contributions;
-        const n1 = transparencyComparison[1].contributions;
-        const max1 = Math.max(t1, n1);
-        $('#bar-conv-trans').style.height = (H * t1/max1) + 'px';
-        $('#bar-conv-non').style.height  = (H * n1/max1) + 'px';
-        // 2) Donor preference for full details (Generosity Commission 67% want details)
-        const want = 67, dont = 33; const max2 = Math.max(want, dont);
-        $('#bar-ret-trans').style.height = (H * want/max2) + 'px';
-        $('#bar-ret-non').style.height  = (H * dont/max2) + 'px';
-        // 3) M+R main donation page conversion (17% in 2021 vs 12% in 2024 summaries)
-        const y2021 = 17, y2024 = 12; const max3 = Math.max(y2021, y2024);
-        $('#bar-gift-trans').style.height = (H * y2021/max3) + 'px';
-        $('#bar-gift-non').style.height  = (H * y2024/max3) + 'px';
-      }
-
-      function renderCases(){
-        const c = $('#cases'); c.innerHTML = '';
-        realExamples.forEach(ex=>{
-          const div = document.createElement('div');
-          div.className = 'card';
-          div.innerHTML = `<b>${ex.name}</b><div class="small" style="margin-top:6px">${ex.summary} <a href="${ex.url}" target="_blank" rel="noopener">Learn more →</a></div>`;
-          c.appendChild(div);
-        });
-      }
-
-      function renderSportButtons(){
-        const wrap = document.getElementById('sport-buttons');
-        wrap.innerHTML='';
-        Object.entries(sportsData).forEach(([key, sport])=>{
-          const btn = document.createElement('button');
-          btn.className = 'pill' + (key===selectedSport?' active':'');
-          btn.textContent = sport.name;
-          btn.dataset.key = key;
-          btn.addEventListener('click', ()=>{ selectedSport = key; renderPrototype(); });
-          wrap.appendChild(btn);
-        });
-      }
-
-      function buildConicGradient(parts){
-        let acc = 0; let stops = [];
-        parts.forEach(p=>{ const start=acc; const end=acc + p.value; stops.push(`${p.color} ${start}% ${end}%`); acc=end; });
-        return `conic-gradient(${stops.join(',')})`;
-      }
-
-      function renderPrototype(){
-        // buttons state
-        $$('#sport-buttons .pill').forEach(b=> b.classList.toggle('active', b.dataset.key===selectedSport));
-        // labels
-        setText('amt-label', donationAmount);
-        setText('amt-inline', donationAmount);
-        // allocation math
-        const alloc = sportsData[selectedSport].allocation.map(it=> ({...it, amount: Math.round(it.value/100 * donationAmount)}));
-        // pie
-        const pie = document.getElementById('pie');
-        let pct = 0; const parts = alloc.map(a=> ({color:a.color, value:a.value}));
-        pie.style.background = buildConicGradient(parts);
-        // breakdown list
-        const list = document.getElementById('breakdown');
-        list.innerHTML = '';
-        alloc.forEach(it=>{
-          const row = document.createElement('div');
-          row.className = 'item';
-          row.innerHTML = `<div class="row" style="gap:8px"><span class="badge" style="background:${it.color}"></span><b>${it.name}</b></div>
-                           <div><b style="color:var(--green)">${fmtMoney(it.amount)}</b> <span class="small">(${it.value}%)</span></div>`;
-          list.appendChild(row);
-        });
-        // quick pills sync
-        $$('#tab-prototype .pill[data-amt]').forEach(p=> p.classList.toggle('active', Number(p.dataset.amt)===donationAmount));
-      }
-
-      function renderAll(){
-        renderMetrics();
-        renderBars();
-        renderCases();
-        renderSportButtons();
-        renderPrototype();
-      }
-
-      // ----- Events -----
-      $$('.tab').forEach(btn=>{
-        btn.addEventListener('click', ()=>{
-          $$('.tab').forEach(b=>b.classList.remove('active'));
-          btn.classList.add('active');
-          const id = btn.dataset.tab;
-          activeTab = id;
-          $$('.tabpane').forEach(p=>p.classList.add('hidden'));
-          document.getElementById('tab-'+id).classList.remove('hidden');
-        });
-      });
-
-      document.getElementById('amt').addEventListener('input', e=>{ donationAmount = Number(e.target.value); renderPrototype(); });
-      $$('#tab-prototype .pill[data-amt]').forEach(p=> p.addEventListener('click', ()=>{ donationAmount = Number(p.dataset.amt); document.getElementById('amt').value = donationAmount; renderPrototype(); }));
-
-      // CTA link → switch to ROI tab
-      document.addEventListener('click', function(e){
-        const link = e.target.closest('#cta-roi');
-        if (link) {
-          e.preventDefault();
-          const btn = document.querySelector('.tab[data-tab="projections"]');
-          if (btn) btn.click();
-          window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-      });
-
-      // Debug: show top-level JS errors on page
-      window.addEventListener('error', function(e){
-        const r = document.querySelector('.wrap');
-        if(!r) return;
-        const msg = e && e.message ? e.message : (e.error && e.error.message) || 'Unknown error';
-        const pre = document.createElement('div');
-        pre.style.cssText='margin:12px 0;padding:10px;border-radius:10px;background:#fef2f2;color:#991b1b;font-weight:600;';
-        pre.textContent = 'JS Error: ' + msg;
-        r.insertBefore(pre, r.firstChild);
-      }, { once:true });
-
-      // ----- Kickoff -----
-      renderAll();
-    </script>
+  // Minimal script: only renders Current State metrics
+  const currentMetrics = { monthlyVisitors: 2000, conversionRate: 2.1, avgDonation: 285 };
+  function fmtMoney(n){ return '$' + Number(n).toLocaleString(); }
+  function renderMetrics(){
+    const vis = document.getElementById('m-vis');
+    const conv = document.getElementById('m-conv');
+    const avg = document.getElementById('m-avg');
+    const rev = document.getElementById('m-rev');
+    if(!vis||!conv||!avg||!rev) return;
+    vis.textContent = currentMetrics.monthlyVisitors.toLocaleString();
+    conv.textContent = currentMetrics.conversionRate + '%';
+    avg.textContent = fmtMoney(currentMetrics.avgDonation);
+    const r = Math.round(currentMetrics.monthlyVisitors * (currentMetrics.conversionRate/100) * currentMetrics.avgDonation);
+    rev.textContent = fmtMoney(r);
+  }
+  renderMetrics();
+</script>
   </body>
 </html>
