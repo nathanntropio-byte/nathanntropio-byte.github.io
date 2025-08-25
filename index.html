@@ -73,6 +73,15 @@
         </div>
         <p class="small" style="margin-top:6px"><em>Note:</em> These figures are illustrative for demo purposes (not NYU’s actual analytics). We can swap in real GA4/CRM numbers when available.</p>
 
+        <div class="small" style="color:#fff;opacity:.9">Higher Conversion</div></div>
+            <div class="kpi"><div class="num">199%</div><div class="small" style="color:#fff;opacity:.9">Year 1 ROI</div></div>
+            <div class="kpi"><div class="num">6</div><div class="small" style="color:#fff;opacity:.9">Months to Payback</div></div>
+          </div>
+          <div style="margin-top:12px">
+            <a href="#roi" id="cta-roi" class="pill" style="background:#fff;color:#1f2937">View ROI analysis →</a>
+          </div>
+        </div>
+
         <div class="card" style="margin-top:16px">
           <h3 style="margin:0 0 12px 0">Current Challenges</h3>
           <div class="grid g-3">
@@ -346,6 +355,17 @@
 
       document.getElementById('amt').addEventListener('input', e=>{ donationAmount = Number(e.target.value); renderPrototype(); });
       $$('#tab-prototype .pill[data-amt]').forEach(p=> p.addEventListener('click', ()=>{ donationAmount = Number(p.dataset.amt); document.getElementById('amt').value = donationAmount; renderPrototype(); }));
+
+      // CTA link → switch to ROI tab
+      document.addEventListener('click', function(e){
+        const link = e.target.closest('#cta-roi');
+        if (link) {
+          e.preventDefault();
+          const btn = document.querySelector('.tab[data-tab="projections"]');
+          if (btn) btn.click();
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+      });
 
       // Debug: show top-level JS errors on page
       window.addEventListener('error', function(e){
