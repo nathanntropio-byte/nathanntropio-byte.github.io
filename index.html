@@ -28,10 +28,11 @@
       .pill{padding:6px 10px;border-radius:10px;background:#f3f4f6;color:#374151;cursor:pointer;font-weight:600}
       .pill.active{background:var(--blue);color:#fff}
       .row{display:flex;justify-content:space-between;align-items:center}
-      .bar{height:160px;display:flex;align-items:flex-end;gap:16px}
+      .bar{height:160px;display:grid;grid-template-columns:repeat(2,42px);justify-content:center;column-gap:16px;align-items:end}
       .barcol{width:42px;background:linear-gradient(180deg,var(--indigo),#c7d2fe);border-radius:8px}
       .barcol.alt{background:linear-gradient(180deg,var(--teal),#99f6e4)}
       .barlabel{text-align:center;font-size:12px;color:#374151;margin-top:8px}
+      .barlabels{display:grid;grid-template-columns:repeat(2,42px);justify-content:center;column-gap:16px;margin-top:8px}
       .note{background:#ecfdf5;color:#166534;padding:10px;border-radius:10px;font-weight:700}
       .donorlist .item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:#f8fafc}
       .badge{display:inline-block;width:14px;height:14px;border-radius:4px;margin-right:8px}
@@ -92,7 +93,7 @@
                 <div class="barcol" id="bar-conv-trans"></div>
                 <div class="barcol alt" id="bar-conv-non"></div>
               </div>
-              <div class="row"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
+              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
             </div>
             <div>
               <b>Donor Retention</b>
@@ -100,7 +101,7 @@
                 <div class="barcol" id="bar-ret-trans"></div>
                 <div class="barcol alt" id="bar-ret-non"></div>
               </div>
-              <div class="row"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
+              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
             </div>
             <div>
               <b>Average Gift</b>
@@ -108,7 +109,7 @@
                 <div class="barcol" id="bar-gift-trans"></div>
                 <div class="barcol alt" id="bar-gift-non"></div>
               </div>
-              <div class="row"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
+              <div class="barlabels"><div class="barlabel">Transparent</div><div class="barlabel">Non‑Transparent</div></div>
             </div>
           </div>
           <div class="note" style="margin-top:14px">Key Insight: Transparent orgs achieve 137% higher conversion, 73% better retention, 64% larger gifts.</div>
