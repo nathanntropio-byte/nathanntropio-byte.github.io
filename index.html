@@ -8,7 +8,7 @@
       :root{
         --bg: #f6f5ff; --bg2:#f0f7ff; --card:#ffffff; --text:#1f2937; --muted:#6b7280;
         --blue:#2563eb; --purple:#7c3aed; --green:#16a34a; --yellow:#f59e0b; --red:#dc2626;
-        --indigo:#6366f1; --teal:#14b8a6; --orange:#f97316; --sky:#0ea5e9; --barw:56px; --bargap:18px;
+        --indigo:#6366f1; --teal:#14b8a6; --orange:#f97316; --sky:#0ea5e9; --barw:92px; --bargap:20px;
       }
       *{box-sizing:border-box}
       body{margin:0;background:linear-gradient(135deg,var(--bg),var(--bg2));font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,Helvetica,Arial,sans-serif;color:var(--text)}
@@ -31,7 +31,7 @@
       .bar{height:160px;display:grid;grid-template-columns:repeat(2,var(--barw));justify-content:center;column-gap:var(--bargap);align-items:end}
       .barcol{width:var(--barw);background:linear-gradient(180deg,var(--indigo),#c7d2fe);border-radius:8px}
       .barcol.alt{background:linear-gradient(180deg,var(--teal),#99f6e4)}
-      .barlabel{width:var(--barw);text-align:center;font-size:12px;color:#374151;margin-top:8px;overflow-wrap:anywhere;word-break:break-word;line-height:1.1}
+      .barlabel{width:var(--barw);text-align:center;font-size:12px;color:#374151;margin-top:8px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis} 
       .barlabels{display:grid;grid-template-columns:repeat(2,var(--barw));justify-content:center;justify-items:center;column-gap:var(--bargap);margin-top:8px}
       .note{background:#ecfdf5;color:#166534;padding:10px;border-radius:10px;font-weight:700}
       .donorlist .item{display:flex;justify-content:space-between;align-items:center;padding:10px;border-radius:10px;background:#f8fafc}
@@ -217,20 +217,43 @@
         { name: 'DonorsChoose — Line-item breakdowns', url: 'https://www.donorschoose.org/about/finance.html', summary: 'Each classroom project shows an itemized cost breakdown so donors can see exactly where money goes.' }
       ];
 
+      // Helpers
+      const $ = (sel) => document.querySelector(sel);
+      const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+      function setText(id, text){ const el = document.getElementById(id); if(el) el.textContent = text; }
+      function fmtMoney(n){ return '$' + n.toLocaleString(); }
+
+      function renderMetrics(){
+        setText('m-vis', currentMetrics.monthlyVisitors.toLocaleString());
+        setText('m-conv', currentMetrics.conversionRate + '%');
+        setText('m-avg', fmtMoney(currentMetrics.avgDonation));
+        setText('m-rev', fmtMoney(currentMetrics.monthlyRevenue));
+      }
+
+      function renderBars(){
+        const H = 160; // px
+        // 1) Candid contributions index (162 vs 100)
+        const t1 = transparencyComparison[0].contributions;
+        const n1 = transparencyComparison[1].contributions;
+        const max1 = Math.max(t1, n1);
+        $('#bar-conv-trans').style.height = (H * t1/max1) + 'px';
+        $('#bar-conv-non').style.height  = (H * n1/max1) + 'px';
+        // 2) Donor preference for full details (Generosity Commission 67% want details)
+        const want = 67, dont = 33; const max2 = Math.max(want, dont);
+        $('#bar-ret-trans').style.height = (H * want/max2) + 'px';
+        $('#bar-ret-non').style.height  = (H * dont/max2) + 'px';
+        // 3) M+R main donation page conversion (17% in 2021 vs 12% in 2024 summaries)
+        const y2021 = 17, y2024 = 12; const max3 = Math.max(y2021, y2024);
+        $('#bar-gift-trans').style.height = (H * y2021/max3) + 'px';
+        $('#bar-gift-non').style.height  = (H * y2024/max3) + 'px';
+      }
+
       function renderCases(){
         const c = $('#cases'); c.innerHTML = '';
         realExamples.forEach(ex=>{
           const div = document.createElement('div');
           div.className = 'card';
           div.innerHTML = `<b>${ex.name}</b><div class="small" style="margin-top:6px">${ex.summary} <a href="${ex.url}" target="_blank" rel="noopener">Learn more →</a></div>`;
-          c.appendChild(div);
-        });
-      }</b>
-            <div class="grid g-2" style="margin:8px 0">
-              <div>Conversion: <span style="color:#dc2626">${case_.before.conversion}%</span> → <b style="color:#16a34a">${case_.after.conversion}%</b></div>
-              <div>Retention: <span style="color:#dc2626">${case_.before.retention}%</span> → <b style="color:#16a34a">${case_.after.retention}%</b></div>
-            </div>
-            <div class="small" style="background:#eff6ff;padding:8px;border-radius:8px">${case_.change}</div>`;
           c.appendChild(div);
         });
       }
