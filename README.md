@@ -1,1 +1,131 @@
-# nathanntropio-byte.github.io
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fan Engagement & Ticketing Bot Analysis</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; line-height: 1.6; }
+        h1, h2 { text-align: center; color: #333; }
+        h3 { color: #555; margin-top: 20px; }
+        .charts-row { display: flex; justify-content: space-around; flex-wrap: wrap; }
+        .chart-container { width: 30%; min-width: 300px; margin: 20px 0; }
+        .section { max-width: 1200px; margin: 40px auto; }
+        ul { margin-left: 20px; }
+        a { color: #007bff; text-decoration: none; }
+        a:hover { text-decoration: underline; }
+    </style>
+</head>
+<body>
+    <h1>Project: Fan Engagement & Ticketing Bot Analysis</h1>
+
+    <div class="section">
+        <h2>Problem Overview</h2>
+        <p>Automated bots and scalpers reduce real fans' ability to buy tickets at face value, inflate secondary market prices, and damage brand trust. Key risks include:</p>
+        <ul>
+            <li><strong>Denial of inventory:</strong> Bots add tickets to carts but never check out, preventing real customers from purchasing.</li>
+            <li><strong>Server overload:</strong> Automated traffic overwhelms servers, causing slow performance or crashes.</li>
+            <li><strong>Card fraud:</strong> Bots test stolen or cracked payment cards.</li>
+            <li><strong>Scraping:</strong> Bots steal listings and content, posting them to competitor sites, losing visibility and revenue.</li>
+        </ul>
+        <p>Example: Ticket scalping technology and bot usage can lead to <strong>up to 60% of tickets being purchased by bots</strong> (Museums and the Web, 2017). Only 46% of tickets are typically available to the general public (NY Attorney General).</p>
+    </div>
+
+    <div class="section charts-row">
+        <div class="chart-container">
+            <h3>Tickets Reserved vs Public</h3>
+            <canvas id="ticketAvailabilityChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>Bot Purchases & Secondary Market</h3>
+            <canvas id="botImpactChart"></canvas>
+        </div>
+        <div class="chart-container">
+            <h3>Global Secondary Market Growth</h3>
+            <canvas id="marketGrowthChart"></canvas>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Solutions & Recommendations</h2>
+        <h3>1. Use Effective CAPTCHA</h3>
+        <ul>
+            <li>Integrate multi-signal CAPTCHAs to detect sophisticated bots.</li>
+            <li>Continuously improve using real challenge data.</li>
+            <li>Connect CAPTCHAs to anti-bot platforms for full protection.</li>
+        </ul>
+        <h3>2. Establish Smart Buying Limits</h3>
+        <ul>
+            <li>Limit tickets per transaction, session, or day (e.g., 4–8 tickets).</li>
+            <li>Provide verified exceptions for corporate groups or fan clubs.</li>
+            <li>Monitor for fake accounts attempting to bypass limits.</li>
+        </ul>
+        <h3>3. Invest in Anti-Bot Technology</h3>
+        <ul>
+            <li>Analyze every request, not just samples.</li>
+            <li>Maintain low false positive rates.</li>
+            <li>Continuously evolve detection to match bot sophistication.</li>
+        </ul>
+    </div>
+
+    <script>
+        // 1️⃣ Tickets Reserved vs Available (Horizontal)
+        new Chart(document.getElementById('ticketAvailabilityChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Reserved for Insiders', 'Available to Public'],
+                datasets: [{
+                    label: 'Percentage',
+                    data: [54, 46],
+                    backgroundColor: ['#FF6F61', '#6BCB77']
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: { title: { display: true, text: 'Ticket Availability: Public vs Insiders (NY AG)' } },
+                scales: { x: { beginAtZero: true, max: 100 } }
+            }
+        });
+
+        // 2️⃣ Bot Purchases & Secondary Market (Horizontal)
+        new Chart(document.getElementById('botImpactChart'), {
+            type: 'bar',
+            data: {
+                labels: ['Tickets by Bots (%)', 'Avg Secondary Markup (%)', 'Fans Paying Up to 70x Face Value'],
+                datasets: [{
+                    label: 'Real-World Metrics',
+                    data: [60, 49, 70],
+                    backgroundColor: ['#FFA500', '#FF6F61', '#8DD3C7']
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: { title: { display: true, text: 'Bot Impact & Secondary Market' } },
+                scales: { x: { beginAtZero: true } }
+            }
+        });
+
+        // 3️⃣ Global Secondary Ticket Market Growth (Horizontal)
+        new Chart(document.getElementById('marketGrowthChart'), {
+            type: 'bar',
+            data: {
+                labels: ['2024', '2025', '2026', '2027', '2028', '2029'],
+                datasets: [{
+                    label: 'Market Size ($B)',
+                    data: [3.4, 3.7, 4.0, 4.4, 4.8, 5.2],
+                    backgroundColor: '#6BCB77'
+                }]
+            },
+            options: {
+                indexAxis: 'y',
+                responsive: true,
+                plugins: { title: { display: true, text: 'Global Secondary Ticket Market Growth (USD B)' } },
+                scales: { x: { beginAtZero: true } }
+            }
+        });
+    </script>
+</body>
+</html>
